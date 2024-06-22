@@ -63,7 +63,7 @@ const settingresponsenull =()=>{
         </button>
           </div> 
     }
-      <form onSubmit={handleSubmit} className="flex flex-col w-2/4 gap-5 justify-center items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col w-2/4 max-md:w-full gap-5 justify-center items-center">
         <div className="formin w-full flex gap-3 flex-col">
           <fieldset className="border-2 border-white rounded-lg p-4">
             <legend className="text-xl">Enter your name</legend>
