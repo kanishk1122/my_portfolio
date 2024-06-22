@@ -1,0 +1,35 @@
+/* ProjectComponent.css */
+@keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes bounce-out {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  
+  .videoplayer {
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  
+  .project-name {
+    transition: color 0.3s ease-in-out;
+  }
+  
+ 
+  
