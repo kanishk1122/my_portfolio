@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Contact = () => {
+const Contact = (gotobutton) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,6 +53,7 @@ const settingresponsenull =()=>{
 
   return (
     <div className='w-full h-fit min-h-[70vh] flex relative  justify-center items-center'>
+        <gotobutton/>
     {
         response &&    <div className='w-[250px] gap-5 animate-bounce text-xl  font-semibold  h-[100px] text-center bg-zinc-900 rounded-lg border-2 border-white  flex justify-center items-center    absolute top-0'> <div>{response}</div>
         <button
@@ -111,7 +112,7 @@ const settingresponsenull =()=>{
         <input
           type="submit"
           onClick={checkvalue}
-          className="h-fit w-full   text-xl bg-white rounded-full border-none px-8 text-black"
+          className="h-fit w-full  cursor-pointer  text-xl bg-white rounded-full border-none px-8 text-black"
           value={loader ? 'wait for submit ' : 'Contact'}
         />
       </form>

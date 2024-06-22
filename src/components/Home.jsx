@@ -683,13 +683,22 @@ const Home = () => {
             clicked.one ||
             clicked.four ||
             clicked.three ? "hidden"
-              : "w-[38%] h-1/2"
+              : "w-[38%] h-1/2 "
           } 
-          ${clicked.five && 'w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center'}
+          ${clicked.five ? 'w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center' : ' w-[38%] h-1/2 '}
            bg-zinc-800/50  backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl`}
         >
+          
          
-          {clicked.five ? <Contact/> :<div className="text-7xl w-full h-full ">Contact ME</div>}
+          {clicked.five ? <div className="w-full h-full ">
+          <button
+            onMouseEnter={getmouseneterofminizebutton}
+            onMouseLeave={getmousexitrofminizebutton}
+            onClick={() => updateClickedfive()}
+              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[94%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
+              >{minisizebuttonhovereffecttext}</button>
+          <Contact/> 
+          </div>  :<div className="text-7xl cursor-pointer w-full h-full ">Contact ME</div>}
          
         </motion.div>
       </motion.div>}
