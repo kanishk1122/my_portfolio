@@ -180,8 +180,16 @@
     src: url('./fonts/AquireBold-8Ma60.woff') format('woff'),
   }
   @font-face {
-    font-family: 'Aquire-bold';
+    font-family: 'Aquire-light';
     src: url('./fonts/AquireLight-YzE0o.woff') format('woff'),
+  }
+  @font-face {
+    font-family: 'monument';
+    src: url('./fonts/MonumentExtended-Regular.woff') format('woff'),
+  }
+  @font-face {
+    font-family: 'monument-bold';
+    src: url('./fonts/MonumentExtended-Ultrabold.woff') format('woff'),
   }
   
   
