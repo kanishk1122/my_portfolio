@@ -170,6 +170,19 @@
     font-display: swap;
     font-style: italic;
   }
+
+  @font-face {
+    font-family: 'Aquire';
+    src: url('./fonts/Aquire-BW0ox.woff') format('woff'),
+  }
+  @font-face {
+    font-family: 'Aquire-bold';
+    src: url('./fonts/AquireBold-8Ma60.woff') format('woff'),
+  }
+  @font-face {
+    font-family: 'Aquire-bold';
+    src: url('./fonts/AquireLight-YzE0o.woff') format('woff'),
+  }
   
   
 *{
