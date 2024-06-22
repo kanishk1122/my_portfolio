@@ -103,6 +103,7 @@ const Home = () => {
     "Javascript",
     "CSS",
     "HTML",
+    "tailwind",
   ];
 
   const skillsComponents = myskills.map((item, index) => (
