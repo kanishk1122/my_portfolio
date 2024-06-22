@@ -1,7 +1,7 @@
 import  { useState, useEffect, useRef } from "react";
 // import mymemoji from "../public/images/1718656650065j77dnhl1-removebg-preview.png";
 import { Link } from "react-router-dom";
-const Navbar = ({clicked,setclicked}) => {
+const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
   const [showmwnu, setshowmwnu] = useState(false);
   const [showsocial,setshowsocial ] = useState(false)
   const timeoutRef = useRef(null);
@@ -72,6 +72,7 @@ const Navbar = ({clicked,setclicked}) => {
     setshowsocial(()=>!showsocial)
   }
 
+
   return (
     <div className="w-full h-[10vh] pt-12 relative flex gap-6 justify-center items-center">
       {/* <div className="w-[50px] relative h-[50px] flex justify-center items-center rounded-full drop-shadow-xl bg-zinc-800">
@@ -122,9 +123,9 @@ const Navbar = ({clicked,setclicked}) => {
             }`}
           >
             <div className="w-full text-center">
-              <Link to="/contactme">
+              <button onClick={updateClickedfive}>
                 <pre className="font-['Roboto']">Contact me</pre>
-              </Link>
+              </button>
             </div>
             <hr className="border-zinc-600 border w-full rounded-full" />
             <div

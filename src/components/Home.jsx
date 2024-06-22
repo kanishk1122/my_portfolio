@@ -235,7 +235,7 @@ const Home = () => {
     <div className="w-[99vw] md:w-[98.7vw] bg-black text-white h-fit  ">
       <div className=" bg-black  w-full  overflow-x-hidden text-white h-fit">
         <span className="fixed z-50 flex left-1/2 -translate-x-1/2 ">
-          <Navbar clicked={clicked} setclicked={setclicked} />
+          <Navbar clicked={clicked} setclicked={setclicked} updateClickedfive={updateClickedfive}  />
         </span>
         <span className="w-screen flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center ">
           <First3dmodel />
