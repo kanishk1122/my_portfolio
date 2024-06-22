@@ -9,6 +9,7 @@ const Contact = () => {
     message: ''
   });
   const [response, setresponse] = useState("")
+ const [loader,setloader] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,10 +24,14 @@ const Contact = () => {
             mobile: '',
             message: ''
           })
+          setloader(false)
       }
       // Optionally handle success response here
     } catch (error) {
       setresponse('Failed to send email');
+      if (error) {
+        setloader(false)
+      }
       // Optionally handle error response here
     }
   };
@@ -37,12 +42,13 @@ const Contact = () => {
   };
 
 const checkvalue =()=>{
-    
-        setTimeout(()=>setresponse(''), 7000);
-    
+    setloader(true)
+        setTimeout(()=>{setresponse('')} , 7000);
 }
 const settingresponsenull =()=>{
     setresponse('')
+    setloader(false)
+    
 }
 
   return (
@@ -106,7 +112,7 @@ const settingresponsenull =()=>{
           type="submit"
           onClick={checkvalue}
           className="h-fit w-full   text-xl bg-white rounded-full border-none px-8 text-black"
-          value="Contact"
+          value={loader ? 'wait for submit ' : 'Contact'}
         />
       </form>
     </div>
