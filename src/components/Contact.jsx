@@ -16,6 +16,14 @@ const Contact = () => {
     try {
       const response = await axios.post('https://about-me-update-1.onrender.com/send-email', formData);
       setresponse('Email sent successfully');
+      if(response === 'Email sent successfully'){
+        setFormData({
+            name: '',
+            email: '',
+            mobile: '',
+            message: ''
+          })
+      }
       // Optionally handle success response here
     } catch (error) {
       setresponse('Failed to send email');
