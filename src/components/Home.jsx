@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import mypic from "../public/images/Untitled-transformed.jpeg";
-import video from "../assets/videos/workportfilio.mp4";
+import video from "../../public/videos/workportfilio.mp4";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

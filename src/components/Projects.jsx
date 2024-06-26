@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import allprojectdata from '../assets/allprojectdata.json'
 import '../css/project.css'
+import video from '../../public/videos/kepapro.mp4'
 const Projects = () => {
 
   const [hoveredProject, setHoveredProject] = useState(null);
