@@ -14,7 +14,7 @@ const Projects = () => {
         "https://i.imgur.com/sW2h3d5.png"
       ],
       "project_link":"https://kepapro.vercel.app/",
-      "video_link": "../assets/videos/kepapro.mp4",
+      "video_link": "src/assets/videos/kepapro.mp4",
       "project_Category":"fullstack"
     },
     {
