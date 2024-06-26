@@ -14,7 +14,7 @@ const Projects = () => {
         "https://i.imgur.com/sW2h3d5.png"
       ],
       "project_link":"https://kepapro.vercel.app/",
-      "video_link": "src/assets/videos/kepapro.mp4",
+      "video_link": "/assets/videos/kepapro.mp4",
       "project_Category":"fullstack"
     },
     {
@@ -26,7 +26,7 @@ const Projects = () => {
         "https://i.imgur.com/v1y80ua.png"
       ],
       "project_link":"https://music-school-front-end.vercel.app/",
-      "video_link": "/src/assets/videos/musicschool.mp4",
+      "video_link": "/assets/videos/musicschool.mp4",
       "project_Category":"frontend"
     },
     {
@@ -38,7 +38,7 @@ const Projects = () => {
         "https://i.imgur.com/DZg9iZp.png"
       ],
       "project_link":"https://printrest.onrender.com/",
-      "video_link": "/src/assets/videos/printerst.mp4",
+      "video_link": "/assets/videos/printerst.mp4",
       "project_Category":"fullstack"
     },
     {
@@ -50,7 +50,7 @@ const Projects = () => {
         "https://i.imgur.com/yYqA2gV.png"
       ],
       "project_link":"https://music-school-front-end.vercel.app/",
-      "video_link": "./src/assets/videos/magma.mp4",
+      "video_link": "/assets/videos/magma.mp4",
       "project_Category":"frontend"
     }
   
