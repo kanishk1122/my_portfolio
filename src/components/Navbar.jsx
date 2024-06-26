@@ -1,7 +1,7 @@
 import  { useState, useEffect, useRef } from "react";
 // import mymemoji from "../public/images/1718656650065j77dnhl1-removebg-preview.png";
 import { Link } from "react-router-dom";
-const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
+const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
   const [showmwnu, setshowmwnu] = useState(false);
   const [showsocial,setshowsocial ] = useState(false)
   const timeoutRef = useRef(null);
@@ -38,16 +38,12 @@ const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
   ]
 
   const resetwebpage=()=>{
-      // eslint-disable-next-line react/prop-types
-      setclicked.one(false)
-      // eslint-disable-next-line react/prop-types
-      setclicked.two(false)
-      // eslint-disable-next-line react/prop-types
-      setclicked.three(false)
-      // eslint-disable-next-line react/prop-types
-      setclicked.four(false)
-      // eslint-disable-next-line react/prop-types
-      setclicked.five(false)
+    const resetClicked = clicked.map(item => {
+      const key = Object.keys(item)[0];
+      return { [key]: false };
+    });
+    setclicked(resetClicked);
+
       
   }
 
@@ -78,7 +74,7 @@ const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
       {/* <div className="w-[50px] relative h-[50px] flex justify-center items-center rounded-full drop-shadow-xl bg-zinc-800">
         <img src={mymemoji} className="w-[75%] h-[75%] object-cover" alt="" />
       </div> */}
-      <div className="px-3 py-2 gap-7 drop-shadow-xl bg-zinc-800 w-fit h-fit rounded-full flex justify-center items-center">
+      <div className="px-3 py-2 gap-7 drop-shadow-xl bg-zinc-800/50 backdrop-blur-xl w-fit h-fit rounded-full flex justify-center items-center">
         <Link 
         onClick={()=>resetwebpage()}
         to='/'
@@ -91,10 +87,10 @@ const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
             onMouseEnter={menudisplayfunction}
             onMouseLeave={startHideMenuTimeout}
             onClick={startHideMenuTimeout}
-            className="w-fit h-fit rounded-full cursor-pointer px-3 py-3 drop-shadow-2xl bg-white"
+            className="w-fit h-fit rounded-full cursor-pointer px-3 py-3 drop-shadow-2xl bg-transparent"
           >
             <svg
-              fill="#91918e"
+              fill="#ffffff"
               height="20px"
               width="20px"
               version="1.1"
@@ -118,8 +114,8 @@ const Navbar = ({clicked,setclicked ,updateClickedfive}) => {
             onMouseEnter={menudisplayfunction}
             onMouseLeave={()=>setshowmwnu(false)}
             
-            className={`flex flex-col  justify-center  items-center border-zinc-900 drop-shadow-xl bg-zinc-500 left-[5vw] top-[13vh] rounded-2xl border  absolute transition-all duration-300 ${
-              showmwnu ? "max-h-40 max-w-[150px] p-2" : "max-h-0 p-0 max-w-0 overflow-hidden"
+            className={`flex flex-col  justify-center  items-center   bg-zinc-800 backdrop-blur-xl left-[5vw] top-[13vh] rounded-2xl   absolute transition-all duration-300 ${
+              showmwnu ? "max-h-40 max-w-[150px] p-2 border-white  border-2" : "max-h-0 p-0 max-w-0 overflow-hidden"
             }`}
           >
             <div className="w-full text-center">

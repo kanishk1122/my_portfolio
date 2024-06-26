@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import mypic from "../public/images/Untitled-transformed.jpeg";
-import video from "../../public/videos/workportfilio.mp4";
+import video from "/videos/workportfilio.mp4";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -236,7 +236,7 @@ const Home = () => {
     <div className="w-[99vw] md:w-[98.7vw] bg-black text-white h-fit  ">
       <div className=" bg-black  w-full  overflow-x-hidden text-white h-fit">
         <span className="fixed z-50 flex left-1/2 -translate-x-1/2 ">
-          <Navbar clicked={clicked} setclicked={setclicked} updateClickedfive={updateClickedfive}  />
+          <Navbar clicked={clicked} setclicked={setclicked} updateClickedfive={updateClickedfive}    />
         </span>
         <span className="w-screen flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center ">
           <First3dmodel />
@@ -486,14 +486,10 @@ const Home = () => {
             <div
               onClick={() => !clicked.five && updateClickedfive()}
               className={`w-[38%] h-1/2  ${
-                clicked.two ||
-                clicked.one ||
-                clicked.four ||
-                clicked.three ||
-                clicked.five
-                  ? ""
-                  : "w-full h-fit"
-              }  bg-zinc-800/50  backdrop-blur-2xl flex p-3 flex-col rounded-xl
+               !clicked.five ? clicked.two || clicked.one || clicked.four || clicked.three 
+               ? "hidden"
+               : "w-[100%] h-1/2 " : "w-full min-h-screen  h-full bg-zinc-800"
+              }   bg-zinc-800/50  backdrop-blur-2xl flex p-3 flex-col rounded-xl
           ${
             clicked.five
               ? "w-full min-h-screen  h-full bg-zinc-800"
@@ -780,9 +776,9 @@ const Home = () => {
               drag={clicked.five ? false : true}
               dragConstraints={constraintsRef}
               className={`w-[38%] h-1/2  ${
-                clicked.two || clicked.one || clicked.four || clicked.three
-                  ? "hidden"
-                  : "w-[38%] h-1/2 "
+               !clicked.five ? clicked.two || clicked.one || clicked.four || clicked.three 
+               ? "hidden"
+               : "w-[38%] h-1/2 " : "w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center"
               } 
           ${
             clicked.five

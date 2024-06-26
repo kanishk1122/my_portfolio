@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Contact = (gotobutton) => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,7 +53,7 @@ const settingresponsenull =()=>{
 
   return (
     <div className='w-full h-fit min-h-[70vh] flex relative  justify-center items-center'>
-        <gotobutton/>
+       
     {
         response &&    <div className='w-[250px] gap-5 animate-bounce text-xl  font-semibold  h-[100px] text-center bg-zinc-900 rounded-lg border-2 border-white  flex justify-center items-center    absolute top-0'> <div>{response}</div>
         <button
