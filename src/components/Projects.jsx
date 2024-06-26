@@ -2,9 +2,11 @@ import { useState } from 'react'
 import allprojectdata from '../assets/allprojectdata.json'
 import '../css/project.css'
 import video from '../../public/videos/kepapro.mp4'
+import Loader from './Loader'
 const Projects = () => {
 
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [loadeing, setloadeing] = useState(true)
 
   
   
@@ -39,7 +41,7 @@ const Projects = () => {
               className='videoplayer  w-[20%] absolute h-[23vh] -top-[9vh] overflow-hidden border-4 rounded-3xl border-white object-cover'
               style={{ display: hoveredProject === index ? 'block' : 'none' }}
             >
-              <video src={item.video_link} autoPlay loop muted className='w-full bg-red-500  h-full object-cover ' >
+              <video  src={item.video_link} autoPlay loop muted className='w-full bg-transparent  h-full object-cover ' >
              
               </video>
             </div>
