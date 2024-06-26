@@ -50,7 +50,7 @@ const Projects = () => {
         "https://i.imgur.com/yYqA2gV.png"
       ],
       "project_link":"https://music-school-front-end.vercel.app/",
-      "video_link": "/src/assets/videos/magma.mp4",
+      "video_link": "./src/assets/videos/magma.mp4",
       "project_Category":"frontend"
     }
   
