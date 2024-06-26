@@ -36,7 +36,7 @@ const Projects = () => {
            className='w-[45%] flex flex-col justify-center items-center h-fit text-center max-md:w-full '>
             <div
               className='videoplayer  w-[20%] absolute h-[23vh] -top-[9vh] overflow-hidden border-4 rounded-3xl border-white object-cover'
-              style={{ display: hoveredProject === index ? 'block' : 'none' }}
+              style={{ opacity: hoveredProject === index ? '1' : ' 0' }}
             >
               <video src={item.video_link} autoPlay loop muted className='w-full bg-red-500  h-full object-cover ' >
              

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense ,useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import ComputersCanvas from './Computer';
@@ -9,9 +9,30 @@ const Model = () => {
   return <primitive object={scene} />;
 };
 
+
+
+const draggableStyle = {
+  cursor: 'grab',
+  cursor: 'url(images/grab.cur), grab',
+};
+
+const activeDraggableStyle = {
+  cursor: 'grabbing',
+  cursor: 'url(images/grabbing.cur), grabbing',
+};
+
+
+
+
 const First3dmodel = () => {
+  const [isDragging, setIsDragging] = useState(false);
   return (
-    <div className='w-fit '>
+    <div className='w-fit cursor-grab '
+    style={isDragging ? activeDraggableStyle : draggableStyle}
+      onMouseDown={() => setIsDragging(true)}
+      onMouseUp={() => setIsDragging(false)}
+      onMouseLeave={() => setIsDragging(false)}
+    >
       <section className="w-full h-[300px] relative ">
         <Canvas className="w-full h-screen bg-transparent" camera={{ near: 0.1, far: 1000 }}>
           <Suspense fallback={<Loader/>} >
