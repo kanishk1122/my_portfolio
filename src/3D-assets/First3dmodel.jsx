@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import ComputersCanvas from './Computer';
+import Loader from '../components/Loader';
 
 const Model = () => {
   const { scene } = useGLTF('/scene.gltf');
@@ -13,7 +14,7 @@ const First3dmodel = () => {
     <div className='w-fit '>
       <section className="w-full h-[300px] relative ">
         <Canvas className="w-full h-screen bg-transparent" camera={{ near: 0.1, far: 1000 }}>
-          <Suspense  >
+          <Suspense fallback={<Loader/>} >
             <directionalLight intensity={0.5} position={[10, 10, 5]} />
             <ambientLight intensity={1.1} />
             <pointLight intensity={0.5} position={[-10, -10, -5]} />
