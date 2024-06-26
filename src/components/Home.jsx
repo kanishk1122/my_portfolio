@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import mypic from "../public/images/Untitled-transformed.jpeg";
-import video from "./videos/workportfilio.mp4";
+import video from "../assets/videos/workportfilio.mp4";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,7 +23,6 @@ const Home = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
   const [countdown, setCountdown] = useState("");
-  const [loading, setloading] = useState(true)
   const [minisizebuttonhovereffecttext, setminisizebuttonhovereffecttext] =
     useState(
       <svg
@@ -234,9 +233,8 @@ const Home = () => {
   };
 
   return (
-    <div className="w-[99vw] md:w-[98.7vw] bg-black text-white h-fit  " >
-    <div>
-    <div className=" bg-black  w-full  overflow-x-hidden text-white h-fit">
+    <div className="w-[99vw] md:w-[98.7vw] bg-black text-white h-fit  ">
+      <div className=" bg-black  w-full  overflow-x-hidden text-white h-fit">
         <span className="fixed z-50 flex left-1/2 -translate-x-1/2 ">
           <Navbar clicked={clicked} setclicked={setclicked} updateClickedfive={updateClickedfive}  />
         </span>
@@ -814,7 +812,6 @@ const Home = () => {
           </motion.div>
         )}
       </div>
-    </div>
     </div>
   );
 };

@@ -9,19 +9,19 @@
           "https://i.imgur.com/sW2h3d5.png"
         ],
         "project_link":"https://kepapro.vercel.app/",
-        "video_link": "/src/components/videos/kepapro.mp4",
+        "video_link": "/src/assets/videos/kepapro.mp4",
         "project_Category":"fullstack"
       },
       {
         "id":2,
         "project_name": "Music school",
-        "project_description": "this an front model of an music school make with morden  animation and design  ",
+        "project_description": "This is a description of Project Beta, focused on creating a mobile application for fitness tracking.",
         "photo_links": [
           "https://i.imgur.com/MRfmQRD.png",
           "https://i.imgur.com/v1y80ua.png"
         ],
         "project_link":"https://music-school-front-end.vercel.app/",
-        "video_link": "./videos/musicschool.mp4",
+        "video_link": "/src/assets/videos/musicschool.mp4",
         "project_Category":"frontend"
       },
       {
@@ -33,7 +33,7 @@
           "https://i.imgur.com/DZg9iZp.png"
         ],
         "project_link":"https://printrest.onrender.com/",
-        "video_link": "./videos/printerst.mp4",
+        "video_link": "/src/assets/videos/printerst.mp4",
         "project_Category":"fullstack"
       },
       {
@@ -45,7 +45,7 @@
           "https://i.imgur.com/yYqA2gV.png"
         ],
         "project_link":"https://music-school-front-end.vercel.app/",
-        "video_link": "./videos/magma.mp4",
+        "video_link": "/src/assets/videos/magma.mp4",
         "project_Category":"frontend"
       }
     
