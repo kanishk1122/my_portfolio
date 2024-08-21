@@ -260,7 +260,7 @@ const Phoneview = () => {
               onClick={() => {
                 getmousexitrofminizebutton(), updateClickedOne();
               }}
-              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px] absolute left-[96%] max-md:left-[90%] px-1 py-1 rounded-full flex justify-center items-center "
+              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px] absolute left-[0%] max-md:left-[90%] px-1 py-1 rounded-full flex justify-center items-center "
             >
               {minisizebuttonhovereffecttext}
             </button>
@@ -351,7 +351,7 @@ const Phoneview = () => {
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
               onClick={() => updateClickedtwo()}
-              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[94%] top-3 px-1 py-1 rounded-full max-md:left-[90%] flex justify-center items-center "
+              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[0%] top-3 px-1 py-1 rounded-full max-md:left-[90%] flex justify-center items-center "
             >
               {minisizebuttonhovereffecttext}
             </button>
@@ -380,7 +380,7 @@ const Phoneview = () => {
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
               onClick={() => updateClickedthree()}
-              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[94%] top-3 px-1 py-1 rounded-full max-md:left-[90%] flex justify-center items-center "
+              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[0%] top-3 px-1 py-1 rounded-full max-md:left-[90%] flex justify-center items-center "
             >
               {minisizebuttonhovereffecttext}
             </button>
@@ -487,7 +487,7 @@ const Phoneview = () => {
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
               onClick={() => updateClickedfive()}
-              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[94%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
+              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[0%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
             >
               {minisizebuttonhovereffecttext}
             </button>

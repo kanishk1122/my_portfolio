@@ -35,11 +35,11 @@ const Home = () => {
         <span className="fixed z-50 flex left-1/2 -translate-x-1/2">
           <Navbar />
         </span>
-        <span className="w-screen absolute flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
+        <span className="w-fit md:ml-[80%] lg:ml-[80%] z-[9999] absolute flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
           <First3dmodel />
         </span>
       </div>
-      <div className="flex w-full h-fit mt-[10vh] max-md:mt-[22vh] min-h-screen flex-col justify-center items-center">
+      <div className="flex  w-full h-fit mt-[10vh] max-md:mt-[22vh] min-h-screen flex-col justify-center items-center">
         {isSmallScreen ? <Phoneview /> : <Computerview />}
       </div>
     </div>
