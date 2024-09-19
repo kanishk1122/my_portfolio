@@ -97,6 +97,7 @@ const Computerview = () => {
     "GSAP",
     "mySQL",
     "Javascript",
+    "Java & DSA",
     "CSS",
     "HTML",
     "tailwind",
