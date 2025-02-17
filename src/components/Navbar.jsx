@@ -74,12 +74,14 @@ const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
       {/* <div className="w-[50px] relative h-[50px] flex justify-center items-center rounded-full drop-shadow-xl bg-zinc-800">
         <img src={mymemoji} className="w-[75%] h-[75%] object-cover" alt="" />
       </div> */}
-      <div className="px-3 py-2 gap-7 drop-shadow-xl bg-zinc-800/50 backdrop-blur-xl w-fit h-fit rounded-full flex justify-center items-center">
+      <div className="px-6 py-3 gap-7 drop-shadow-xl bg-zinc-800/30 hover:bg-zinc-800/50 backdrop-blur-xl w-fit h-fit rounded-full flex justify-center items-center transition-all duration-300">
         <Link 
-        onClick={()=>resetwebpage()}
-        to='/'
+          onClick={()=>resetwebpage()}
+          to='/'
+          className="relative group"
         >
-          <h1 className="text-xl font-semibold">Home</h1>
+          <h1 className="text-xl font-semibold transition-all duration-300 hover:scale-110">Home</h1>
+          <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white group-hover:w-full transition-all duration-300"></span>
         </Link>
         <img src='https://lh3.google.com/u/0/d/1WakUNA7heGXBTcVx7SBgMaG-ejyJWD4d=w740-h609-iv1' className="w-[10px] h-[10px]" />
         <div>
@@ -87,7 +89,7 @@ const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
             onMouseEnter={menudisplayfunction}
             onMouseLeave={startHideMenuTimeout}
             onClick={startHideMenuTimeout}
-            className="w-fit h-fit rounded-full cursor-pointer px-3 py-3 drop-shadow-2xl bg-transparent"
+            className="w-fit h-fit rounded-full cursor-pointer px-3 py-3 hover:bg-zinc-700/50 transition-all duration-300"
           >
             <svg
               fill="#ffffff"
@@ -96,7 +98,7 @@ const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
               version="1.1"
               id="Layer_1"
               viewBox="0 0 297 297"
-              className="cursor-pointer"
+              className="cursor-pointer transform transition-transform duration-300 hover:rotate-180"
             >
               <g>
                 <g>
@@ -114,43 +116,57 @@ const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
             onMouseEnter={menudisplayfunction}
             onMouseLeave={()=>setshowmwnu(false)}
             
-            className={`flex flex-col  justify-center  items-center   bg-zinc-800 backdrop-blur-xl left-[5vw] top-[13vh] rounded-2xl   absolute transition-all duration-300 ${
-              showmwnu ? "max-h-40 max-w-[150px] p-2 border-white  border-2" : "max-h-0 p-0 max-w-0 overflow-hidden"
+            className={`flex flex-col justify-center items-center bg-zinc-800/90 backdrop-blur-xl left-[5vw] top-[13vh] rounded-2xl absolute transition-all duration-500 ${
+              showmwnu 
+                ? "max-h-40 max-w-[150px] p-2 border-white/20 border-2 opacity-100 translate-y-0" 
+                : "max-h-0 p-0 max-w-0 overflow-hidden opacity-0 -translate-y-4"
             }`}
           >
             <div className="w-full text-center">
-              <button onClick={updateClickedfive}>
+              <button 
+                onClick={updateClickedfive}
+                className="w-full py-2 hover:bg-zinc-700/50 rounded-lg transition-all duration-300"
+              >
                 <pre className="font-['Roboto']">Contact me</pre>
               </button>
             </div>
-            <hr className="border-zinc-600 border w-full rounded-full" />
-            <div
-             onClick={()=>controlshowsocailpanel()}
-             className="w-full text-center">
+            <hr className="border-zinc-600 border w-full rounded-full my-2" />
+            <div className="w-full text-center">
               <button
-             
-              >Social</button>
+                onClick={()=>controlshowsocailpanel()}
+                className="w-full py-2 hover:bg-zinc-700/50 rounded-lg transition-all duration-300"
+              >
+                Social
+              </button>
             </div>
           </div>
         </div>
       </div>
      
-        <div
+      <div
         onClick={()=>controlshowsocailpanel()}
-         className={`${showsocial ?'fixed w-screen h-screen bg-[rgba(76,75,75,0.5)] top-[-0%] flex justify-center items-center backdrop-blur-[5px]' : 'hidden'}`}>
-          <div className={`w-1/2  max-w-[400px] px-3 py-2  rounded-2xl drop-shadow-xl bg-black  h-[50vh] fixed flex flex-col gap-4 flex-shrink-0 justify-center items-center    top-[30vh] `}>
-          
-        {
-          socialhandle.map((item,index)=>(
-            <a target="_blank"  href={item.id} key={index} className={` w-full hover:text-3xl  h-fit flex justify-evenly  px-20 items-center ${showsocial ? 'opacity-1' : 'opacity-0 '} duration-100  `}>
-          <img src={item.image} className="w-fit  h-[50px]" alt="" />
-            <p  className="  duration-200 font-semibold "> {item.platform}</p>
-        </a>
-          ))
-        }
+        className={`fixed w-screen h-screen transition-all duration-500 ${
+          showsocial 
+            ? 'bg-[rgba(0,0,0,0.7)] backdrop-blur-[8px] opacity-100' 
+            : 'opacity-0 pointer-events-none'
+        } top-0 -left-[40vw] flex justify-center items-center`}
+      >
+        <div className={`w-1/2 max-w-[400px] px-3 py-2 rounded-2xl bg-zinc-900/90 h-[50vh] flex flex-col gap-4 justify-center items-center transition-all duration-500 transform ${
+          showsocial ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        }`}>
+          {socialhandle.map((item,index)=>(
+            <a 
+              target="_blank"  
+              href={item.id} 
+              key={index} 
+              className="w-full hover:bg-zinc-800/50 rounded-xl p-4 flex justify-evenly items-center transition-all duration-300 transform hover:scale-105"
+            >
+              <img src={item.image} className="w-[50px] h-[50px] object-contain" alt="" />
+              <p className="text-xl font-semibold">{item.platform}</p>
+            </a>
+          ))}
         </div>
-  </div>
-      
+      </div>
     </div>
   );
 };
