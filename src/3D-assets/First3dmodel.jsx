@@ -13,7 +13,7 @@ const Model = () => {
 
 const draggableStyle = {
   cursor: 'grab',
-  cursor: 'url(images/grab.cur), grab',
+  // cursor: 'url(images/grab.cur), grab',
 };
 
 const activeDraggableStyle = {
