@@ -59,7 +59,7 @@ const Computerview = () => {
     one: searchParams.get("section") === "about",
     two: searchParams.get("section") === "clock",
     three: searchParams.get("section") === "projects",
-    four: searchParams.get("section") === "links",
+    // four: searchParams.get("section") === "links",
     five: searchParams.get("section") === "contact",
   };
 
@@ -233,7 +233,9 @@ const Computerview = () => {
     "GSAP",
     "mySQL",
     "Javascript",
-    "Java & DSA",
+    "Java",
+    "C++",
+    "DSA",
     "CSS",
     "HTML",
     "tailwind",
@@ -544,6 +546,8 @@ const Computerview = () => {
         whileDrag={{
           scale: 1.02,
           boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+          // Visual effect for dragging
+          zIndex: 50,
         }}
         className={`bg-zinc-800/50 flex cursor-pointer duration-300 backdrop-blur-2xl justify-center items-center p-3 rounded-xl ${
           clicked.one || clicked.three || clicked.five

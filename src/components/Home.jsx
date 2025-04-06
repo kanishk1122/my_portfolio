@@ -7,6 +7,7 @@ import First3dmodel from "../3D-assets/First3dmodel";
 import Phoneview from "./Phoneview";
 import Computerview from "./Computerview";
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {

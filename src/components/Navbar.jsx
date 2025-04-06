@@ -74,7 +74,7 @@ const Navbar = ({clicked ,updateClickedfive ,setclicked}) => {
       {/* <div className="w-[50px] relative h-[50px] flex justify-center items-center rounded-full drop-shadow-xl bg-zinc-800">
         <img src={mymemoji} className="w-[75%] h-[75%] object-cover" alt="" />
       </div> */}
-      <div className="px-6 py-3 gap-7 drop-shadow-xl bg-zinc-800/30 hover:bg-zinc-800/50 backdrop-blur-xl w-fit h-fit rounded-full flex justify-center items-center transition-all duration-300">
+      <div className="px-6 py-3 ml-20 gap-7 drop-shadow-xl bg-zinc-800/30 hover:bg-zinc-800/50 backdrop-blur-xl w-fit h-fit rounded-full flex justify-center items-center transition-all duration-300">
         <Link 
           onClick={()=>resetwebpage()}
           to='/'
