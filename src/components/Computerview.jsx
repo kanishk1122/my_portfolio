@@ -52,6 +52,8 @@ const Computerview = () => {
         <path d="M5 11V13H19V11H5Z"></path>
       </svg>
     );
+  // Add a new state to track if drag just ended
+  const [justDragged, setJustDragged] = useState(false);
 
   const clicked = {
     one: searchParams.get("section") === "about",
@@ -68,6 +70,9 @@ const Computerview = () => {
   // Add drag state tracking
   const [isDragging, setIsDragging] = useState(false);
   const [draggedComponent, setDraggedComponent] = useState(null);
+
+  // Add drag starting position tracking
+  const [draggingStartPos, setDraggingStartPos] = useState({ x: 0, y: 0 });
 
   // Preload sounds
   useEffect(() => {
@@ -100,18 +105,61 @@ const Computerview = () => {
     }
   };
 
-  // Handle drag start with sound
-  const handleDragStart = (componentId) => {
+  // Handle drag start with sound and position tracking
+  const handleDragStart = (componentId, event) => {
     setIsDragging(true);
     setDraggedComponent(componentId);
+
+    // Store the starting position
+    if (event && event.clientX && event.clientY) {
+      setDraggingStartPos({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    }
+
     playGrabSound();
   };
 
   // Handle drag end with sound
-  const handleDragEnd = () => {
+  const handleDragEnd = (event) => {
     setIsDragging(false);
     playDropSound();
     setTimeout(() => setDraggedComponent(null), 100);
+
+    // Set justDragged to true when drag ends
+    setJustDragged(true);
+
+    // Reset justDragged after a short delay
+    setTimeout(() => {
+      setJustDragged(false);
+    }, 500); // Increased to 500ms for better reliability
+  };
+
+  // Custom click handler that checks if a real drag occurred
+  const handleComponentClick = (componentId, event, clickHandler) => {
+    // If we're dragging or just finished dragging, don't process click
+    if (isDragging || justDragged) return;
+
+    // If there was meaningful movement during drag, don't process as click
+    if (draggingStartPos.x !== 0 && event && event.clientX) {
+      const distanceMoved = Math.sqrt(
+        Math.pow(event.clientX - draggingStartPos.x, 2) +
+          Math.pow(event.clientY - draggingStartPos.y, 2)
+      );
+
+      // If moved more than 5px, consider it a drag not a click
+      if (distanceMoved > 5) {
+        setDraggingStartPos({ x: 0, y: 0 });
+        return;
+      }
+    }
+
+    // Reset starting position
+    setDraggingStartPos({ x: 0, y: 0 });
+
+    // Execute the click handler
+    clickHandler();
   };
 
   useEffect(() => {
@@ -132,6 +180,7 @@ const Computerview = () => {
   }, []);
 
   const updateClickedOne = () => {
+    if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.one) {
       setSearchParams({ section: "about" });
     } else {
@@ -140,6 +189,7 @@ const Computerview = () => {
   };
 
   const updateClickedtwo = () => {
+    if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.two) {
       setSearchParams({ section: "clock" });
     } else {
@@ -148,6 +198,7 @@ const Computerview = () => {
   };
 
   const updateClickedthree = () => {
+    if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.three) {
       setSearchParams({ section: "projects" });
     } else {
@@ -156,6 +207,7 @@ const Computerview = () => {
   };
 
   const updateClickedfour = () => {
+    if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.four) {
       setSearchParams({ section: "links" });
     } else {
@@ -164,6 +216,7 @@ const Computerview = () => {
   };
 
   const updateClickedfive = () => {
+    if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.five) {
       setSearchParams({ section: "contact" });
     } else {
@@ -290,6 +343,30 @@ const Computerview = () => {
     );
   };
 
+  const [firstwindowhovervalue, setfirstwindowhovervalue] = useState(
+    <>
+      <p>
+        Hey there! I'm <span className="font-bold">Kanishk Soni</span>, an
+        18-year-old coding enthusiast hailing from the vibrant city of Jaipur.
+        Coding has been my passion for{" "}
+        <span className="font-semibold">{countdown} days</span>, and in that
+        time, I've brought several exciting projects to life. While I've
+        completed many, I've highlighted a few of my favorites here. Curious to
+        see more? Dive into my GitHub to explore the full spectrum of my work. I
+        hope you enjoy browsing through my portfolio as much as I enjoyed
+        creating it!
+      </p>
+    </>
+  );
+
+  const getmouseenteronfirstwindow = () => {
+    setfirstwindowhovervalue(
+      <>
+        <p className="text-red-400">Click to view more about me!</p>
+      </>
+    );
+  };
+
   return (
     <motion.div
       ref={constraintsRef}
@@ -300,10 +377,12 @@ const Computerview = () => {
       } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
     >
       <motion.div
-        onClick={() => !clicked.one && updateClickedOne()}
+        onClick={(e) =>
+          !clicked.one && handleComponentClick("about", e, updateClickedOne)
+        }
         drag={!clicked.one}
         dragConstraints={constraintsRef}
-        onDragStart={() => handleDragStart("about")}
+        onDragStart={(e) => handleDragStart("about", e)}
         onDragEnd={handleDragEnd}
         whileDrag={{
           scale: 1.02,
@@ -455,10 +534,12 @@ const Computerview = () => {
       </motion.div>
 
       <motion.div
-        onClick={() => !clicked.two && updateClickedtwo()}
+        onClick={(e) =>
+          !clicked.two && handleComponentClick("clock", e, updateClickedtwo)
+        }
         drag={!clicked.two}
         dragConstraints={constraintsRef}
-        onDragStart={() => handleDragStart("clock")}
+        onDragStart={(e) => handleDragStart("clock", e)}
         onDragEnd={handleDragEnd}
         whileDrag={{
           scale: 1.02,
@@ -489,10 +570,13 @@ const Computerview = () => {
         )}
       </motion.div>
       <motion.div
-        onClick={() => !clicked.three && updateClickedthree()}
+        onClick={(e) =>
+          !clicked.three &&
+          handleComponentClick("projects", e, updateClickedthree)
+        }
         drag={!clicked.three}
         dragConstraints={constraintsRef}
-        onDragStart={() => handleDragStart("projects")}
+        onDragStart={(e) => handleDragStart("projects", e)}
         onDragEnd={handleDragEnd}
         whileDrag={{
           scale: 1.02,
@@ -543,9 +627,12 @@ const Computerview = () => {
         )}
       </motion.div>
       <motion.div
+        onClick={(e) =>
+          !clicked.four && handleComponentClick("links", e, updateClickedfour)
+        }
         drag={!clicked.four}
         dragConstraints={constraintsRef}
-        onDragStart={() => handleDragStart("links")}
+        onDragStart={(e) => handleDragStart("links", e)}
         onDragEnd={handleDragEnd}
         whileDrag={{
           scale: 1.02,
@@ -615,10 +702,12 @@ const Computerview = () => {
         </div>
       </motion.div>
       <motion.div
-        onClick={() => !clicked.five && updateClickedfive()}
+        onClick={(e) =>
+          !clicked.five && handleComponentClick("contact", e, updateClickedfive)
+        }
         drag={!clicked.five}
         dragConstraints={constraintsRef}
-        onDragStart={() => handleDragStart("contact")}
+        onDragStart={(e) => handleDragStart("contact", e)}
         onDragEnd={handleDragEnd}
         whileDrag={{
           scale: 1.02,
