@@ -17,7 +17,6 @@ const draggableStyle = {
 };
 
 const activeDraggableStyle = {
-  cursor: 'grabbing',
   cursor: 'url(images/grabbing.cur), grabbing',
 };
 

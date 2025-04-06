@@ -35,7 +35,7 @@ const Home = () => {
         <span className="fixed z-50 flex left-1/2 -translate-x-1/2">
           <Navbar />
         </span>
-        <span className="w-fit md:ml-[80%] lg:ml-[80%] z-[9999] absolute flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
+        <span className="w-fit max-sm:hidden fixed md:ml-[80%] lg:ml-[80%] z-[9999]  flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
           <First3dmodel />
         </span>
       </div>

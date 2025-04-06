@@ -5,7 +5,9 @@ import mypic from "../public/images/Untitled-transformed.jpeg";
 import video from "/videos/workportfilio.mp4";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSearchParams } from "react-router-dom";
 
+import PixelTransition from "./utils/Pixelimage";
 import Animation from "./Animationtest";
 import housewithfishvideo from "../assets/original.mp4";
 import TextTransition, { presets } from "react-text-transition";
@@ -14,9 +16,22 @@ import Projects from "./Projects";
 import Contact from "./Contact";
 
 gsap.registerPlugin(ScrollTrigger);
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+const Contactme = () => {
+  return (
+    <DotLottieReact
+      src="https://lottie.host/b24a225a-48b3-4301-beba-5df87625820b/fwEWxL9vX1.lottie"
+      loop
+      className="size-[100px] "
+      autoplay
+    />
+  );
+};
 
 const Computerview = () => {
   const constraintsRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
   const [countdown, setCountdown] = useState("");
@@ -32,13 +47,14 @@ const Computerview = () => {
         <path d="M5 11V13H19V11H5Z"></path>
       </svg>
     );
-  const [clicked, setclicked] = useState([
-    { one: false },
-    { two: false },
-    { three: false },
-    { four: false },
-    { five: false },
-  ]);
+
+  const clicked = {
+    one: searchParams.get("section") === "about",
+    two: searchParams.get("section") === "clock",
+    three: searchParams.get("section") === "projects",
+    four: searchParams.get("section") === "links",
+    five: searchParams.get("section") === "contact",
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,34 +74,43 @@ const Computerview = () => {
   }, []);
 
   const updateClickedOne = () => {
-    setclicked((prevState) => ({
-      ...prevState,
-      one: !prevState.one,
-    }));
+    if (!clicked.one) {
+      setSearchParams({ section: "about" });
+    } else {
+      setSearchParams({});
+    }
   };
+
   const updateClickedtwo = () => {
-    setclicked((prevState) => ({
-      ...prevState,
-      two: !prevState.two,
-    }));
+    if (!clicked.two) {
+      setSearchParams({ section: "clock" });
+    } else {
+      setSearchParams({});
+    }
   };
-  const updateClickedfour = () => {
-    setclicked((prevState) => ({
-      ...prevState,
-      four: !prevState.four,
-    }));
-  };
+
   const updateClickedthree = () => {
-    setclicked((prevState) => ({
-      ...prevState,
-      three: !prevState.three,
-    }));
+    if (!clicked.three) {
+      setSearchParams({ section: "projects" });
+    } else {
+      setSearchParams({});
+    }
   };
+
+  const updateClickedfour = () => {
+    if (!clicked.four) {
+      setSearchParams({ section: "links" });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   const updateClickedfive = () => {
-    setclicked((prevState) => ({
-      ...prevState,
-      five: !prevState.five,
-    }));
+    if (!clicked.five) {
+      setSearchParams({ section: "contact" });
+    } else {
+      setSearchParams({});
+    }
   };
 
   const myskills = [
@@ -189,45 +214,6 @@ const Computerview = () => {
     );
   };
 
-  useEffect(() => {
-    setfirstwindowhovervalue(
-      <>
-        <p>
-          Hey there! I'm <span className="font-bold ">Kanishk Soni</span>, an
-          18-year-old coding enthusiast hailing from the vibrant city of Jaipur.
-          Coding has been my passion for{" "}
-          <span className="font-semibold">{countdown} days</span>, and in that
-          time, I've brought several exciting projects to life. While I've
-          completed many, I've highlighted a few of my favorites here. Curious
-          to see more? Dive into my GitHub to explore the full spectrum of my
-          work. I hope you enjoy browsing through my portfolio as much as I
-          enjoyed creating it!
-        </p>
-      </>
-    );
-  }, [countdown]);
-
-  const [firstwindowhovervalue, setfirstwindowhovervalue] = useState(
-    <>
-      <p>
-        Hey there! I'm <span className="font-bold ">Kanishk Soni</span>, an
-        18-year-old coding enthusiast hailing from the vibrant city of Jaipur.
-        Coding has been my passion for{" "}
-        <span className="font-semibold">{countdown} days</span>, and in that
-        time, I've brought several exciting projects to life. While I've
-        completed many, I've highlighted a few of my favorites here. Curious to
-        see more? Dive into my GitHub to explore the full spectrum of my work. I
-        hope you enjoy browsing through my portfolio as much as I enjoyed
-        creating it!
-      </p>
-    </>
-  );
-
-  const getmouseenteronfirstwindow = () => {
-    setfirstwindowhovervalue(
-      <p className="text-3xl font-semibold text-center">Click to know more</p>
-    );
-  };
   const getmouseexitfromfirstwindow = () => {
     setfirstwindowhovervalue(
       <>
@@ -245,14 +231,15 @@ const Computerview = () => {
       </>
     );
   };
+
   return (
     <motion.div
       ref={constraintsRef}
-      className={`   ${
+      className={`${
         clicked.one || clicked.four || clicked.three || clicked.five
-          ? "w-[98vw]  h-full flex overflow-x-hidden  justify-center items-center "
+          ? "w-[98vw] h-full flex overflow-x-hidden justify-center items-center"
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden  gap-2 rounded-2xl  p-3 duration-500  `}
+      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
     >
       <motion.div
         onClick={() => !clicked.one && updateClickedOne()}
@@ -340,10 +327,39 @@ const Computerview = () => {
             className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-transparent backdrop-blur-xl rounded-xl"
           >
             <div className="rounded-2xl  overflow-hidden w-[25%] h-full">
-              <img
-                src={mypic}
-                className="w-full duration-200 h-full object-cover"
-                alt=""
+              <PixelTransition
+                firstContent={
+                  <img
+                    src={mypic}
+                    alt="default pixel transition content, a cat!"
+                    className="w-full duration-200 h-full object-cover"
+                  />
+                }
+                secondContent={
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "grid",
+                      placeItems: "center",
+                      backgroundColor: "#111",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: 900,
+                        fontSize: "2rem",
+                        color: "#ffffff",
+                      }}
+                    >
+                      Click Me !
+                    </p>
+                  </div>
+                }
+                gridSize={12}
+                pixelColor="#ffffff"
+                animationStepDuration={0.4}
+                className="custom-pixel-card"
               />
             </div>
             <div className="w-[60%] h-full flex justify-start items-center flex-col">
@@ -351,9 +367,21 @@ const Computerview = () => {
                 I&apos;m Kanishk
               </h1>
               <p className="md:text-[13px] lg:text-[1vw] text-center">
-                <TextTransition springConfig={presets.wobbly}>
-                  {firstwindowhovervalue}
-                </TextTransition>
+                <>
+                  <p>
+                    Hey there! I'm{" "}
+                    <span className="font-bold ">Kanishk Soni</span>, an
+                    18-year-old coding enthusiast hailing from the vibrant city
+                    of Jaipur. Coding has been my passion for{" "}
+                    <span className="font-semibold">{countdown} days</span>, and
+                    in that time, I've brought several exciting projects to
+                    life. While I've completed many, I've highlighted a few of
+                    my favorites here. Curious to see more? Dive into my GitHub
+                    to explore the full spectrum of my work. I hope you enjoy
+                    browsing through my portfolio as much as I enjoyed creating
+                    it!
+                  </p>
+                </>
               </p>
             </div>
           </div>
@@ -364,13 +392,11 @@ const Computerview = () => {
         onClick={() => !clicked.two && updateClickedtwo()}
         drag={clicked.two ? false : true}
         dragConstraints={constraintsRef}
-        className={` bg-zinc-800/50 flex cursor-pointer duration-300 backdrop-blur-2xl justify-center items-center p-3 rounded-xl ${
+        className={`bg-zinc-800/50 flex cursor-pointer duration-300 backdrop-blur-2xl justify-center items-center p-3 rounded-xl ${
           clicked.one || clicked.three || clicked.five
             ? "hidden"
             : "w-[29%] h-1/2"
-        }
-  ${clicked.two ? "w-full h-full " : "w-[29%] h-1/2"}
-  `}
+        } ${clicked.two ? "w-[97.6vw] h-full" : "w-[29%] h-1/2"}`}
       >
         {clicked.two ? (
           <div className="w-full min-h-full gap-1  flex justify-start items-center  h-full rounded-xl ">
@@ -399,7 +425,7 @@ const Computerview = () => {
         }
   ${
     clicked.three
-      ? "w-full min-h-screen  h-full bg-zinc-800"
+      ? "w-[97.6vw] pt-10 min-h-screen  h-full bg-zinc-800"
       : "w-[30%] h-1/2 cursor-pointer"
   }
      backdrop-blur-2xl relative overflow-hidden  rounded-xl`}
@@ -531,6 +557,7 @@ const Computerview = () => {
         ) : (
           <div className="text-7xl flex justify-start items-center cursor-pointer w-full h-full ">
             Contact <br /> ME
+            <Contactme />
           </div>
         )}
       </motion.div>
