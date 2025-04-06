@@ -39,7 +39,7 @@ const Home = () => {
           <First3dmodel />
         </span>
       </div>
-      <div className="flex  w-full h-fit mt-[10vh] max-md:mt-[22vh] min-h-screen flex-col justify-center items-center">
+      <div className="flex w-full h-fit mt-[10vh] max-md:mt-[22vh] min-h-screen flex-col justify-center items-center mb-10">
         {isSmallScreen ? <Phoneview /> : <Computerview />}
       </div>
     </div>

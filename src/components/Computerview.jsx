@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useDragControls } from "framer-motion";
 import mypic from "../public/images/Untitled-transformed.jpeg";
 import video from "/videos/workportfilio.mp4";
 import gsap from "gsap";
@@ -29,6 +29,11 @@ const Contactme = () => {
   );
 };
 
+// Import sound effects
+// Create these files in your assets folder or use placeholder URLs
+const grabSoundUrl = "/sounds/grab.mp3"; // Soft click sound when grabbing
+const dropSoundUrl = "/sounds/drop.mp3"; // Thud sound when dropping
+
 const Computerview = () => {
   const constraintsRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,6 +59,59 @@ const Computerview = () => {
     three: searchParams.get("section") === "projects",
     four: searchParams.get("section") === "links",
     five: searchParams.get("section") === "contact",
+  };
+
+  // Add refs for sound effects
+  const grabSoundRef = useRef(new Audio(grabSoundUrl));
+  const dropSoundRef = useRef(new Audio(dropSoundUrl));
+
+  // Add drag state tracking
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedComponent, setDraggedComponent] = useState(null);
+
+  // Preload sounds
+  useEffect(() => {
+    grabSoundRef.current.load();
+    dropSoundRef.current.load();
+
+    return () => {
+      grabSoundRef.current.pause();
+      dropSoundRef.current.pause();
+    };
+  }, []);
+
+  // Play grab sound
+  const playGrabSound = () => {
+    try {
+      grabSoundRef.current.currentTime = 0;
+      grabSoundRef.current.play();
+    } catch (err) {
+      console.log("Error playing grab sound:", err);
+    }
+  };
+
+  // Play drop sound
+  const playDropSound = () => {
+    try {
+      dropSoundRef.current.currentTime = 0;
+      dropSoundRef.current.play();
+    } catch (err) {
+      console.log("Error playing drop sound:", err);
+    }
+  };
+
+  // Handle drag start with sound
+  const handleDragStart = (componentId) => {
+    setIsDragging(true);
+    setDraggedComponent(componentId);
+    playGrabSound();
+  };
+
+  // Handle drag end with sound
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    playDropSound();
+    setTimeout(() => setDraggedComponent(null), 100);
   };
 
   useEffect(() => {
@@ -243,8 +301,14 @@ const Computerview = () => {
     >
       <motion.div
         onClick={() => !clicked.one && updateClickedOne()}
-        drag
+        drag={!clicked.one}
         dragConstraints={constraintsRef}
+        onDragStart={() => handleDragStart("about")}
+        onDragEnd={handleDragEnd}
+        whileDrag={{
+          scale: 1.02,
+          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+        }}
         className={`  duration-300  ${
           clicked.two || clicked.three || clicked.five
             ? "hidden"
@@ -253,7 +317,9 @@ const Computerview = () => {
           clicked.one
             ? "w-[97.6vw] h-fit px-4 bg-zinc-500  "
             : "w-[70%] backdrop-blur-xl cursor-pointer h-1/2 overflow-hidden justify-start  gap-4 items-start"
-        }  p-3    bg-zinc-800/50 rounded-xl`}
+        }  p-3    bg-zinc-800/50 rounded-xl ${
+          draggedComponent === "about" ? "z-50" : ""
+        }`}
       >
         {clicked.one ? (
           <div className="w-full max-md:min-h-[250vh] px-6 relative sm:px-24 min-h-[100vh] h-fit flex flex-col justify-start  items-center">
@@ -390,13 +456,21 @@ const Computerview = () => {
 
       <motion.div
         onClick={() => !clicked.two && updateClickedtwo()}
-        drag={clicked.two ? false : true}
+        drag={!clicked.two}
         dragConstraints={constraintsRef}
+        onDragStart={() => handleDragStart("clock")}
+        onDragEnd={handleDragEnd}
+        whileDrag={{
+          scale: 1.02,
+          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+        }}
         className={`bg-zinc-800/50 flex cursor-pointer duration-300 backdrop-blur-2xl justify-center items-center p-3 rounded-xl ${
           clicked.one || clicked.three || clicked.five
             ? "hidden"
             : "w-[29%] h-1/2"
-        } ${clicked.two ? "w-[97.6vw] h-full" : "w-[29%] h-1/2"}`}
+        } ${clicked.two ? "w-[97.6vw] h-full" : "w-[29%] h-1/2"} ${
+          draggedComponent === "clock" ? "z-50" : ""
+        }`}
       >
         {clicked.two ? (
           <div className="w-full min-h-full gap-1  flex justify-start items-center  h-full rounded-xl ">
@@ -416,8 +490,14 @@ const Computerview = () => {
       </motion.div>
       <motion.div
         onClick={() => !clicked.three && updateClickedthree()}
-        drag={clicked.three ? false : true}
+        drag={!clicked.three}
         dragConstraints={constraintsRef}
+        onDragStart={() => handleDragStart("projects")}
+        onDragEnd={handleDragEnd}
+        whileDrag={{
+          scale: 1.02,
+          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+        }}
         className={`  ${
           clicked.two || clicked.one || clicked.five
             ? "hidden"
@@ -428,7 +508,9 @@ const Computerview = () => {
       ? "w-[97.6vw] pt-10 min-h-screen  h-full bg-zinc-800"
       : "w-[30%] h-1/2 cursor-pointer"
   }
-     backdrop-blur-2xl relative overflow-hidden  rounded-xl`}
+     backdrop-blur-2xl relative overflow-hidden  rounded-xl ${
+       draggedComponent === "projects" ? "z-50" : ""
+     }`}
       >
         {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
@@ -461,8 +543,14 @@ const Computerview = () => {
         )}
       </motion.div>
       <motion.div
-        drag
+        drag={!clicked.four}
         dragConstraints={constraintsRef}
+        onDragStart={() => handleDragStart("links")}
+        onDragEnd={handleDragEnd}
+        whileDrag={{
+          scale: 1.02,
+          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+        }}
         className={`  ${
           clicked.two ||
           clicked.one ||
@@ -471,7 +559,9 @@ const Computerview = () => {
           clicked.five
             ? "hidden"
             : "w-[30%] h-1/2"
-        } bg-zinc-900/50  backdrop-blur-2xl flex flex-wrap rounded-xl`}
+        } bg-zinc-900/50  backdrop-blur-2xl flex flex-wrap rounded-xl ${
+          draggedComponent === "links" ? "z-50" : ""
+        }`}
       >
         <div className="flex h-1/2 w-1/2 justify-center items-center">
           <p className="text-5xl  gap-2 font-bold  ">
@@ -526,8 +616,14 @@ const Computerview = () => {
       </motion.div>
       <motion.div
         onClick={() => !clicked.five && updateClickedfive()}
-        drag={clicked.five ? false : true}
+        drag={!clicked.five}
         dragConstraints={constraintsRef}
+        onDragStart={() => handleDragStart("contact")}
+        onDragEnd={handleDragEnd}
+        whileDrag={{
+          scale: 1.02,
+          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
+        }}
         className={`w-[38%] h-1/2  ${
           !clicked.five
             ? clicked.two || clicked.one || clicked.four || clicked.three
@@ -540,7 +636,9 @@ const Computerview = () => {
       ? "w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center"
       : " w-[38%] h-1/2 "
   }
-   bg-zinc-800/50  backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl`}
+   bg-zinc-800/50  backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl ${
+     draggedComponent === "contact" ? "z-50" : ""
+   }`}
       >
         {clicked.five ? (
           <div className="w-full h-full ">
@@ -561,6 +659,13 @@ const Computerview = () => {
           </div>
         )}
       </motion.div>
+
+      {/* Help tooltip that appears when a component is being dragged */}
+      {isDragging && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-full z-[100] text-sm">
+          Drag to reposition • Click to expand
+        </div>
+      )}
     </motion.div>
   );
 };
