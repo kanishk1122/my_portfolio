@@ -53,11 +53,29 @@ const Computerview = () => {
     );
   const [justDragged, setJustDragged] = useState(false);
 
+  // Window management state
+  const [minimizedWindows, setMinimizedWindows] = useState([]);
+  const [windowStates, setWindowStates] = useState({
+    about: { isOpen: false, isMinimized: false },
+    clock: { isOpen: false, isMinimized: false },
+    projects: { isOpen: false, isMinimized: false },
+    contact: { isOpen: false, isMinimized: false },
+  });
+
+  // Update clicked state based on search params and window states
   const clicked = {
-    one: searchParams.get("section") === "about",
-    two: searchParams.get("section") === "clock",
-    three: searchParams.get("section") === "projects",
-    five: searchParams.get("section") === "contact",
+    one:
+      searchParams.get("section") === "about" &&
+      !windowStates.about.isMinimized,
+    two:
+      searchParams.get("section") === "clock" &&
+      !windowStates.clock.isMinimized,
+    three:
+      searchParams.get("section") === "projects" &&
+      !windowStates.projects.isMinimized,
+    five:
+      searchParams.get("section") === "contact" &&
+      !windowStates.contact.isMinimized,
   };
 
   // Drag state tracking
@@ -177,39 +195,111 @@ const Computerview = () => {
     };
   }, []);
 
+  // Window management functions
+  const openWindow = (windowId) => {
+    setWindowStates((prev) => ({
+      ...prev,
+      [windowId]: { isOpen: true, isMinimized: false },
+    }));
+    setSearchParams({
+      section:
+        windowId === "about"
+          ? "about"
+          : windowId === "clock"
+          ? "clock"
+          : windowId === "projects"
+          ? "projects"
+          : "contact",
+    });
+  };
+
+  const minimizeWindow = (windowId) => {
+    const windowTitle = {
+      about: "About Me",
+      clock: "Clock",
+      projects: "Projects",
+      contact: "Contact",
+    }[windowId];
+
+    setWindowStates((prev) => ({
+      ...prev,
+      [windowId]: { isOpen: true, isMinimized: true },
+    }));
+
+    setMinimizedWindows((prev) => {
+      if (!prev.find((w) => w.id === windowId)) {
+        return [...prev, { id: windowId, title: windowTitle }];
+      }
+      return prev;
+    });
+
+    setSearchParams({});
+  };
+
+  const restoreWindow = (windowId) => {
+    setWindowStates((prev) => ({
+      ...prev,
+      [windowId]: { isOpen: true, isMinimized: false },
+    }));
+
+    setMinimizedWindows((prev) => prev.filter((w) => w.id !== windowId));
+
+    setSearchParams({
+      section:
+        windowId === "about"
+          ? "about"
+          : windowId === "clock"
+          ? "clock"
+          : windowId === "projects"
+          ? "projects"
+          : "contact",
+    });
+  };
+
+  const closeWindow = (windowId) => {
+    setWindowStates((prev) => ({
+      ...prev,
+      [windowId]: { isOpen: false, isMinimized: false },
+    }));
+
+    setMinimizedWindows((prev) => prev.filter((w) => w.id !== windowId));
+    setSearchParams({});
+  };
+
+  // Updated click handlers
   const updateClickedOne = () => {
-    if (justDragged) return; // Prevent click action if just finished dragging
-    if (!clicked.one) {
-      setSearchParams({ section: "about" });
+    if (justDragged) return;
+    if (!windowStates.about.isOpen || windowStates.about.isMinimized) {
+      openWindow("about");
     } else {
-      setSearchParams({});
+      closeWindow("about");
     }
   };
 
   const updateClickedtwo = () => {
-    if (justDragged) return; // Prevent click action if just finished dragging
-    if (!clicked.two) {
-      setSearchParams({ section: "clock" });
+    if (justDragged) return;
+    if (!windowStates.clock.isOpen || windowStates.clock.isMinimized) {
+      openWindow("clock");
     } else {
-      setSearchParams({});
+      closeWindow("clock");
     }
   };
 
   const updateClickedthree = () => {
-    if (justDragged) return; // Prevent click action if just finished dragging
-    if (!clicked.three) {
-      setSearchParams({ section: "projects" });
+    if (justDragged) return;
+    if (!windowStates.projects.isOpen || windowStates.projects.isMinimized) {
+      openWindow("projects");
     } else {
-      setSearchParams({});
+      closeWindow("projects");
     }
   };
 
   const updateClickedfive = () => {
-    if (justDragged) return; // Prevent click action if just finished dragging
-    if (!clicked.five) {
-      setSearchParams({ section: "contact" });
+    if (justDragged) return;
+    if (!windowStates.contact.isOpen || windowStates.contact.isMinimized) {
+      openWindow("contact");
     } else {
-      setSearchParams({});
+      closeWindow("contact");
     }
   };
 
@@ -239,6 +329,11 @@ const Computerview = () => {
 
       document.exitFullscreen?.();
     }
+  };
+
+  // Minimize function - closes the current section
+  const minimizeSection = () => {
+    setSearchParams({});
   };
 
   // Listen for fullscreen changes
@@ -283,24 +378,26 @@ const Computerview = () => {
     };
   }, []);
 
-  // Mac-style button component
+  // Mac-style button component with proper minimize functionality
   const MacStyleCloseButton = ({
     onClose,
-    onMinimize,
-    onMaximize,
     componentId,
     onMouseEnter,
     onMouseLeave,
   }) => (
     <div
-      className="mac-buttons-container absolute left-[2%] top-3 z-50"
+      className="mac-buttons-container"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="mac-close-button" onClick={onClose} title="Close" />
+      <div
+        className="mac-close-button"
+        onClick={() => closeWindow(componentId)}
+        title="Close"
+      />
       <div
         className="mac-minimize-button"
-        onClick={() => toggleMaximize(componentId)}
+        onClick={() => minimizeWindow(componentId)}
         title="Minimize"
       />
       <div
@@ -308,6 +405,25 @@ const Computerview = () => {
         onClick={() => toggleMaximize(componentId)}
         title="Maximize"
       />
+    </div>
+  );
+
+  // Taskbar component
+  const Taskbar = () => (
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-zinc-800/90 backdrop-blur-xl rounded-2xl px-4 py-2 flex gap-2">
+      {minimizedWindows.map((window) => (
+        <button
+          key={window.id}
+          onClick={() => restoreWindow(window.id)}
+          className="px-4 py-2 bg-zinc-700/50 hover:bg-zinc-600/50 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105"
+          title={`Restore ${window.title}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+            {window.title}
+          </div>
+        </button>
+      ))}
     </div>
   );
 
@@ -428,14 +544,6 @@ const Computerview = () => {
         onClick={(e) =>
           !clicked.one && handleComponentClick("about", e, updateClickedOne)
         }
-        drag={!clicked.one}
-        dragConstraints={constraintsRef}
-        onDragStart={(e) => handleDragStart("about", e)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{
-          scale: 1.02,
-          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
-        }}
         className={`duration-300 ${
           clicked.two || clicked.three || clicked.five
             ? "hidden"
@@ -444,9 +552,7 @@ const Computerview = () => {
           clicked.one
             ? "w-[97.6vw] h-fit px-4 bg-zinc-500"
             : "w-[70%] backdrop-blur-xl cursor-pointer h-1/2 overflow-hidden justify-start gap-4 items-start"
-        } p-3 bg-zinc-800/50 rounded-xl ${
-          draggedComponent === "about" ? "z-50" : ""
-        }`}
+        } p-3 bg-zinc-800/50 rounded-xl`}
       >
         {clicked.one ? (
           <div
@@ -454,12 +560,9 @@ const Computerview = () => {
               isFullscreen ? "pt-0" : ""
             }`}
           >
+            {/* Show Mac buttons only when section is open */}
             <MacStyleCloseButton
-              onClose={() => {
-                getmousexitrofminizebutton();
-                updateClickedOne();
-              }}
-              onMaximize={toggleMaximize}
+              onClose={() => closeWindow("about")}
               componentId="about"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -587,23 +690,11 @@ const Computerview = () => {
         onClick={(e) =>
           !clicked.two && handleComponentClick("clock", e, updateClickedtwo)
         }
-        drag={!clicked.two}
-        dragConstraints={constraintsRef}
-        onDragStart={(e) => handleDragStart("clock", e)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{
-          scale: 1.02,
-          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
-          // Visual effect for dragging
-          zIndex: 50,
-        }}
         className={`bg-zinc-800/50 flex cursor-pointer duration-300 backdrop-blur-2xl justify-center items-center p-3 rounded-xl ${
           clicked.one || clicked.three || clicked.five
             ? "hidden"
             : "w-[29%] h-1/2"
-        } ${clicked.two ? "w-[97.6vw] h-full" : "w-[29%] h-1/2"} ${
-          draggedComponent === "clock" ? "z-50" : ""
-        }`}
+        } ${clicked.two ? "w-[97.6vw] h-full" : "w-[29%] h-1/2"}`}
       >
         {clicked.two ? (
           <div
@@ -612,8 +703,7 @@ const Computerview = () => {
             }`}
           >
             <MacStyleCloseButton
-              onClose={() => updateClickedtwo()}
-              onMaximize={toggleMaximize}
+              onClose={() => closeWindow("clock")}
               componentId="clock"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -629,14 +719,6 @@ const Computerview = () => {
           !clicked.three &&
           handleComponentClick("projects", e, updateClickedthree)
         }
-        drag={!clicked.three}
-        dragConstraints={constraintsRef}
-        onDragStart={(e) => handleDragStart("projects", e)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{
-          scale: 1.02,
-          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
-        }}
         className={`${
           clicked.two || clicked.one || clicked.five
             ? "hidden"
@@ -645,16 +727,13 @@ const Computerview = () => {
           clicked.three
             ? "w-[97.6vw] pt-10 min-h-screen h-full bg-zinc-800"
             : "w-[30%] h-1/2 cursor-pointer"
-        } backdrop-blur-2xl relative overflow-hidden rounded-xl ${
-          draggedComponent === "projects" ? "z-50" : ""
-        }`}
+        } backdrop-blur-2xl relative overflow-hidden rounded-xl`}
       >
         {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
           <div className="w-full h-fit flex flex-col justify-between items-start">
             <MacStyleCloseButton
-              onClose={() => updateClickedthree()}
-              onMaximize={toggleMaximize}
+              onClose={() => closeWindow("projects")}
               componentId="projects"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -744,29 +823,18 @@ const Computerview = () => {
         onClick={(e) =>
           !clicked.five && handleComponentClick("contact", e, updateClickedfive)
         }
-        drag={!clicked.five}
-        dragConstraints={constraintsRef}
-        onDragStart={(e) => handleDragStart("contact", e)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{
-          scale: 1.02,
-          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
-        }}
         className={`w-[38%] h-1/2 ${
           !clicked.five
             ? clicked.two || clicked.one || clicked.three
               ? "hidden"
               : "w-[38%] h-1/2"
             : "w-[96vw] h-full flex overflow-x-hidden justify-center items-center"
-        } bg-zinc-800/50 backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl ${
-          draggedComponent === "contact" ? "z-50" : ""
-        }`}
+        } bg-zinc-800/50 backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl`}
       >
         {clicked.five ? (
           <div className={`w-full h-full ${isFullscreen ? "pt-0" : ""}`}>
             <MacStyleCloseButton
-              onClose={() => updateClickedfive()}
-              onMaximize={toggleMaximize}
+              onClose={() => closeWindow("contact")}
               componentId="contact"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -784,7 +852,7 @@ const Computerview = () => {
       {/* Help tooltip that appears when a component is being dragged */}
       {isDragging && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-full z-[100] text-sm">
-          Drag to reposition • Click to expand
+          Click to expand
         </div>
       )}
 
@@ -794,6 +862,9 @@ const Computerview = () => {
           Press ESC to exit fullscreen
         </div>
       )}
+
+      {/* Taskbar for minimized windows */}
+      {minimizedWindows.length > 0 && <Taskbar />}
     </motion.div>
   );
 };

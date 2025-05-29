@@ -64,7 +64,7 @@ const Home = () => {
         <span className="navbar-container fixed z-50 flex left-1/2 -translate-x-1/2">
           <Navbar />
         </span>
-        <span className="model-3d-container w-fit max-sm:hidden fixed md:ml-[80%] lg:ml-[80%] z-[9999] flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
+        <span className="model-3d-container fixed top-0 right-0 z-[9998] max-sm:hidden">
           <First3dmodel />
         </span>
       </div>

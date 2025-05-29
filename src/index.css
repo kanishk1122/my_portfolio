@@ -377,6 +377,10 @@ body.fullscreen-active .model-3d-container {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   backdrop-filter: blur(10px);
+  position: fixed !important;
+  top: 20px !important;
+  left: 20px !important;
+  z-index: 10000 !important;
 }
 
 .mac-close-button {
@@ -387,11 +391,23 @@ body.fullscreen-active .model-3d-container {
   border: 1px solid #e04842;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .mac-close-button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 8px rgba(255, 95, 87, 0.5);
+}
+
+.mac-close-button:hover::after {
+  content: "×";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  color: #8b0000;
+  font-weight: bold;
 }
 
 .mac-minimize-button {
@@ -402,11 +418,23 @@ body.fullscreen-active .model-3d-container {
   border: 1px solid #dea123;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .mac-minimize-button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 8px rgba(255, 189, 46, 0.5);
+}
+
+.mac-minimize-button:hover::after {
+  content: "−";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  color: #8b5a00;
+  font-weight: bold;
 }
 
 .mac-maximize-button {
@@ -417,9 +445,36 @@ body.fullscreen-active .model-3d-container {
   border: 1px solid #1aab29;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .mac-maximize-button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 8px rgba(40, 202, 66, 0.5);
+}
+
+.mac-maximize-button:hover::after {
+  content: "⛶";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6px;
+  color: #0d5a1a;
+  font-weight: bold;
+}
+
+/* Taskbar styles */
+.taskbar {
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-item {
+  transition: all 0.2s ease;
+}
+
+.taskbar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
