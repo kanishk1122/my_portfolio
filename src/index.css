@@ -478,3 +478,45 @@ body.fullscreen-active .model-3d-container {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
+
+/* Slider styling for better contrast */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* Better text contrast utilities */
+.text-shadow-strong {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.bg-blur-dark {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.bg-blur-light {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+/* Enhanced drop shadows for icons */
+.icon-shadow {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}

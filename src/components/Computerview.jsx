@@ -410,12 +410,12 @@ const Computerview = () => {
 
   // Taskbar component
   const Taskbar = () => (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-zinc-800/90 backdrop-blur-xl rounded-2xl px-4 py-2 flex gap-2">
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-zinc-800/90 backdrop-blur-xl rounded-2xl px-4 py-2 flex gap-2 border border-zinc-700/50 shadow-lg">
       {minimizedWindows.map((window) => (
         <button
           key={window.id}
           onClick={() => restoreWindow(window.id)}
-          className="px-4 py-2 bg-zinc-700/50 hover:bg-zinc-600/50 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105"
+          className="px-4 py-2 bg-zinc-700/50 hover:bg-zinc-600/50 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105 text-white border border-zinc-600/30"
           title={`Restore ${window.title}`}
         >
           <div className="flex items-center gap-2">
@@ -628,7 +628,7 @@ const Computerview = () => {
             </div>
           </div>
         ) : (
-          <div className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-transparent backdrop-blur-xl rounded-xl">
+          <div className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-zinc-800/70 backdrop-blur-xl rounded-xl border border-zinc-700/50">
             <div className="rounded-2xl overflow-hidden w-[25%] h-full">
               <PixelTransition
                 firstContent={
@@ -653,6 +653,7 @@ const Computerview = () => {
                         fontWeight: 900,
                         fontSize: "2rem",
                         color: "#ffffff",
+                        textShadow: "0 0 10px rgba(255,255,255,0.5)",
                       }}
                     >
                       Click Me !
@@ -666,19 +667,22 @@ const Computerview = () => {
               />
             </div>
             <div className="w-[60%] h-full flex justify-start items-center flex-col">
-              <h1 className="font-bold font-['monument'] bg-clip-text text-3xl text-transparent bg-gradient-to-l from-red-500 to-purple-700">
+              <h1 className="font-bold font-['monument'] bg-clip-text text-3xl text-transparent bg-gradient-to-l from-red-400 to-purple-600 drop-shadow-lg">
                 I&apos;m Kanishk
               </h1>
-              <p className="md:text-[13px] lg:text-[1vw] text-center">
-                Hey there! I'm <span className="font-bold">Kanishk Soni</span>,
-                an 18-year-old coding enthusiast hailing from the vibrant city
-                of Jaipur. Coding has been my passion for{" "}
-                <span className="font-semibold">{countdown} days</span>, and in
-                that time, I've brought several exciting projects to life. While
-                I've completed many, I've highlighted a few of my favorites
-                here. Curious to see more? Dive into my GitHub to explore the
-                full spectrum of my work. I hope you enjoy browsing through my
-                portfolio as much as I enjoyed creating it!
+              <p className="md:text-[13px] lg:text-[1vw] text-center text-gray-100 drop-shadow-md">
+                Hey there! I'm{" "}
+                <span className="font-bold text-white">Kanishk Soni</span>, an
+                18-year-old coding enthusiast hailing from the vibrant city of
+                Jaipur. Coding has been my passion for{" "}
+                <span className="font-semibold text-white">
+                  {countdown} days
+                </span>
+                , and in that time, I've brought several exciting projects to
+                life. While I've completed many, I've highlighted a few of my
+                favorites here. Curious to see more? Dive into my GitHub to
+                explore the full spectrum of my work. I hope you enjoy browsing
+                through my portfolio as much as I enjoyed creating it!
               </p>
             </div>
           </div>
@@ -842,8 +846,10 @@ const Computerview = () => {
             <Contact />
           </div>
         ) : (
-          <div className="text-7xl flex justify-start items-center cursor-pointer w-full h-full">
-            Contact <br /> ME
+          <div className="text-7xl flex justify-start items-center cursor-pointer w-full h-full bg-zinc-800/50 backdrop-blur-sm rounded-xl p-4">
+            <span className="text-white drop-shadow-lg">
+              Contact <br /> ME
+            </span>
             <Contactme />
           </div>
         )}
@@ -864,7 +870,23 @@ const Computerview = () => {
       )}
 
       {/* Taskbar for minimized windows */}
-      {minimizedWindows.length > 0 && <Taskbar />}
+      {minimizedWindows.length > 0 && (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-zinc-800/90 backdrop-blur-xl rounded-2xl px-4 py-2 flex gap-2 border border-zinc-700/50 shadow-lg">
+          {minimizedWindows.map((window) => (
+            <button
+              key={window.id}
+              onClick={() => restoreWindow(window.id)}
+              className="px-4 py-2 bg-zinc-700/50 hover:bg-zinc-600/50 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105 text-white border border-zinc-600/30"
+              title={`Restore ${window.title}`}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                {window.title}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 };

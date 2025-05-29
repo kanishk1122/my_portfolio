@@ -60,4 +60,55 @@ const Stopwatch = () => {
   );
 };
 
+const Clock = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString([], {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 text-white p-8">
+      <div className="text-center">
+        <div className="text-6xl font-bold mb-4 font-mono">
+          {formatTime(time)}
+        </div>
+        <div className="text-xl opacity-80">{formatDate(time)}</div>
+      </div>
+
+      <div className="mt-8 grid grid-cols-2 gap-4 text-center">
+        <div className="bg-white/10 rounded-lg p-4">
+          <div className="text-2xl font-bold">{time.getHours()}</div>
+          <div className="text-sm opacity-70">Hours</div>
+        </div>
+        <div className="bg-white/10 rounded-lg p-4">
+          <div className="text-2xl font-bold">{time.getMinutes()}</div>
+          <div className="text-sm opacity-70">Minutes</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default Stopwatch;
