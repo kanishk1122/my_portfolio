@@ -7,7 +7,6 @@ import First3dmodel from "../3D-assets/First3dmodel";
 import Phoneview from "./Phoneview";
 import Computerview from "./Computerview";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
@@ -33,10 +32,10 @@ const Home = () => {
   return (
     <div className="w-[99vw] md:w-[98.7vw] bg-black text-white h-fit">
       <div className="bg-black w-full overflow-x-hidden text-white h-fit">
-        <span className="fixed z-50 flex left-1/2 -translate-x-1/2">
+        <span className="navbar-container fixed z-50 flex left-1/2 -translate-x-1/2">
           <Navbar />
         </span>
-        <span className="w-fit max-sm:hidden fixed md:ml-[80%] lg:ml-[80%] z-[9999]  flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
+        <span className="model-3d-container w-fit max-sm:hidden fixed md:ml-[80%] lg:ml-[80%] z-[9999] flex justify-end items-center px-3 max-md:pt-16 max-md:justify-center">
           <First3dmodel />
         </span>
       </div>

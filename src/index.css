@@ -308,3 +308,118 @@ input[type="number"] {
 [data-dragging="true"] {
   animation: pulse-border 1.5s infinite;
 }
+
+/* Fullscreen scrolling fixes */
+.fullscreen-container {
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 9999 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: #18181b !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.fullscreen-content {
+  min-height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Ensure scrollbar is visible in fullscreen */
+.fullscreen-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.fullscreen-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fullscreen-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.fullscreen-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Fix for body when in fullscreen */
+body.fullscreen-active {
+  overflow: hidden;
+}
+
+/* Hide elements when in fullscreen */
+body.fullscreen-active .navbar-container,
+body.fullscreen-active .model-3d-container {
+  display: none !important;
+}
+
+/* Reset any motion transforms in fullscreen */
+.fullscreen-container .motion-div {
+  transform: none !important;
+}
+
+/* Mac-style close button styles */
+.mac-buttons-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.mac-close-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f57;
+  border: 1px solid #e04842;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mac-close-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 95, 87, 0.5);
+}
+
+.mac-minimize-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffbd2e;
+  border: 1px solid #dea123;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mac-minimize-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 189, 46, 0.5);
+}
+
+.mac-maximize-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #28ca42;
+  border: 1px solid #1aab29;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mac-maximize-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(40, 202, 66, 0.5);
+}

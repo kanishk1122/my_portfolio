@@ -30,9 +30,8 @@ const Contactme = () => {
 };
 
 // Import sound effects
-// Create these files in your assets folder or use placeholder URLs
-const grabSoundUrl = "/sounds/grab.mp3"; // Soft click sound when grabbing
-const dropSoundUrl = "/sounds/drop.mp3"; // Thud sound when dropping
+const grabSoundUrl = "/sounds/grab.mp3";
+const dropSoundUrl = "/sounds/drop.mp3";
 
 const Computerview = () => {
   const constraintsRef = useRef(null);
@@ -52,27 +51,26 @@ const Computerview = () => {
         <path d="M5 11V13H19V11H5Z"></path>
       </svg>
     );
-  // Add a new state to track if drag just ended
   const [justDragged, setJustDragged] = useState(false);
 
   const clicked = {
     one: searchParams.get("section") === "about",
     two: searchParams.get("section") === "clock",
     three: searchParams.get("section") === "projects",
-    // four: searchParams.get("section") === "links",
     five: searchParams.get("section") === "contact",
   };
 
-  // Add refs for sound effects
-  const grabSoundRef = useRef(new Audio(grabSoundUrl));
-  const dropSoundRef = useRef(new Audio(dropSoundUrl));
-
-  // Add drag state tracking
+  // Drag state tracking
   const [isDragging, setIsDragging] = useState(false);
   const [draggedComponent, setDraggedComponent] = useState(null);
-
-  // Add drag starting position tracking
   const [draggingStartPos, setDraggingStartPos] = useState({ x: 0, y: 0 });
+
+  // Simple fullscreen state
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Sound effects refs
+  const grabSoundRef = useRef(new Audio(grabSoundUrl));
+  const dropSoundRef = useRef(new Audio(dropSoundUrl));
 
   // Preload sounds
   useEffect(() => {
@@ -206,15 +204,6 @@ const Computerview = () => {
     }
   };
 
-  const updateClickedfour = () => {
-    if (justDragged) return; // Prevent click action if just finished dragging
-    if (!clicked.four) {
-      setSearchParams({ section: "links" });
-    } else {
-      setSearchParams({});
-    }
-  };
-
   const updateClickedfive = () => {
     if (justDragged) return; // Prevent click action if just finished dragging
     if (!clicked.five) {
@@ -223,6 +212,104 @@ const Computerview = () => {
       setSearchParams({});
     }
   };
+
+  // Simple fullscreen toggle
+  const toggleMaximize = (componentId) => {
+    const currentlyOpened =
+      clicked.one || clicked.two || clicked.three || clicked.five;
+
+    if (currentlyOpened && !isFullscreen) {
+      // Enter fullscreen
+      setIsFullscreen(true);
+      // Hide navbar and 3D model
+      const navbar = document.querySelector(".navbar-container");
+      const model3d = document.querySelector(".model-3d-container");
+      if (navbar) navbar.style.display = "none";
+      if (model3d) model3d.style.display = "none";
+
+      document.documentElement.requestFullscreen?.();
+    } else if (isFullscreen) {
+      // Exit fullscreen
+      setIsFullscreen(false);
+      // Show navbar and 3D model
+      const navbar = document.querySelector(".navbar-container");
+      const model3d = document.querySelector(".model-3d-container");
+      if (navbar) navbar.style.display = "";
+      if (model3d) model3d.style.display = "";
+
+      document.exitFullscreen?.();
+    }
+  };
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isFullscreenNow = !!document.fullscreenElement;
+      setIsFullscreen(isFullscreenNow);
+
+      const navbar = document.querySelector(".navbar-container");
+      const model3d = document.querySelector(".model-3d-container");
+
+      if (isFullscreenNow) {
+        // Hide elements when entering fullscreen
+        if (navbar) navbar.style.display = "none";
+        if (model3d) model3d.style.display = "none";
+      } else {
+        // Show elements when exiting fullscreen
+        if (navbar) navbar.style.display = "";
+        if (model3d) model3d.style.display = "";
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange
+      );
+    };
+  }, []);
+
+  // Mac-style button component
+  const MacStyleCloseButton = ({
+    onClose,
+    onMinimize,
+    onMaximize,
+    componentId,
+    onMouseEnter,
+    onMouseLeave,
+  }) => (
+    <div
+      className="mac-buttons-container absolute left-[2%] top-3 z-50"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div className="mac-close-button" onClick={onClose} title="Close" />
+      <div
+        className="mac-minimize-button"
+        onClick={() => toggleMaximize(componentId)}
+        title="Minimize"
+      />
+      <div
+        className="mac-maximize-button"
+        onClick={() => toggleMaximize(componentId)}
+        title="Maximize"
+      />
+    </div>
+  );
 
   const myskills = [
     "Express.js",
@@ -244,7 +331,7 @@ const Computerview = () => {
   const skillsComponents = myskills.map((item, index) => (
     <div
       key={index}
-      className="bg-zinc-600/50 font-['Aquire'] p-4 max-md:p-1 backdrop-blur-sm flex justify-center items-center rounded-3xl max-md:w-[100px] max-md:h-[100px]   max-md:text-sm hover:bg-zinc-900/50 duration-300 text-xl font-semibold text-center w-[150px] h-[150px]"
+      className="bg-zinc-600/50 font-['Aquire'] p-4 max-md:p-1 backdrop-blur-sm flex justify-center items-center rounded-3xl max-md:w-[100px] max-md:h-[100px] max-md:text-sm hover:bg-zinc-900/50 duration-300 text-xl font-semibold text-center w-[150px] h-[150px]"
     >
       {item}
     </div>
@@ -273,7 +360,6 @@ const Computerview = () => {
 
     update();
     const intervalId = setInterval(update, 1000);
-
     return () => clearInterval(intervalId);
   }, []);
 
@@ -296,8 +382,7 @@ const Computerview = () => {
 
       updateCurrentDateTime();
       const intervalId = setInterval(updateCurrentDateTime, 1000);
-
-      return () => clearInterval(intervalId); // Cleanup interval on component unmount
+      return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -326,165 +411,17 @@ const Computerview = () => {
     );
   };
 
-  // Mac-style button component with full functionality
-  const MacStyleCloseButton = ({
-    onClose,
-    onMinimize,
-    onMaximize,
-    componentId,
-    onMouseEnter,
-    onMouseLeave,
-  }) => (
-    <div
-      className="mac-buttons-container absolute left-[2%] top-3 z-50"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div className="mac-close-button" onClick={onClose} title="Close" />
-      <div
-        className="mac-minimize-button"
-        onClick={() => onMinimize(componentId)}
-        title="Minimize"
-      />
-      <div
-        className="mac-maximize-button"
-        onClick={() => onMaximize(componentId)}
-        title="Maximize"
-      />
-    </div>
-  );
-
-  // Add state for component management
-  const [minimizedComponents, setMinimizedComponents] = useState([]);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  // Minimize component function
-  const minimizeComponent = (componentId) => {
-    setMinimizedComponents((prev) => [...prev, componentId]);
-
-    // Close the component
-    switch (componentId) {
-      case "about":
-        updateClickedOne();
-        break;
-      case "clock":
-        updateClickedtwo();
-        break;
-      case "projects":
-        updateClickedthree();
-        break;
-      case "contact":
-        updateClickedfive();
-        break;
-    }
-  };
-
-  // Restore component from minimized state
-  const restoreComponent = (componentId) => {
-    setMinimizedComponents((prev) => prev.filter((id) => id !== componentId));
-
-    // Open the component
-    switch (componentId) {
-      case "about":
-        setSearchParams({ section: "about" });
-        break;
-      case "clock":
-        setSearchParams({ section: "clock" });
-        break;
-      case "projects":
-        setSearchParams({ section: "projects" });
-        break;
-      case "contact":
-        setSearchParams({ section: "contact" });
-        break;
-    }
-  };
-
-  // Maximize/toggle fullscreen
-  const toggleMaximize = (componentId) => {
-    const currentlyOpened =
-      clicked.one || clicked.two || clicked.three || clicked.five;
-
-    if (currentlyOpened && !isFullscreen) {
-      // Enter fullscreen mode
-      setIsFullscreen(true);
-      document.documentElement.requestFullscreen?.();
-    } else if (isFullscreen) {
-      // Exit fullscreen mode
-      setIsFullscreen(false);
-      document.exitFullscreen?.();
-    } else {
-      // Just open the component if not already open
-      switch (componentId) {
-        case "about":
-          setSearchParams({ section: "about" });
-          break;
-        case "clock":
-          setSearchParams({ section: "clock" });
-          break;
-        case "projects":
-          setSearchParams({ section: "projects" });
-          break;
-        case "contact":
-          setSearchParams({ section: "contact" });
-          break;
-      }
-    }
-  };
-
-  // Handle fullscreen change
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
-
-  const getmouseexitfromfirstwindow = () => {
-    setfirstwindowhovervalue(
-      <>
-        <p>
-          Hey there! I'm <span className="font-bold ">Kanishk Soni</span>, an
-          18-year-old coding enthusiast hailing from the vibrant city of Jaipur.
-          Coding has been my passion for{" "}
-          <span className="font-semibold">{countdown} days</span>, and in that
-          time, I've brought several exciting projects to life. While I've
-          completed many, I've highlighted a few of my favorites here. Curious
-          to see more? Dive into my GitHub to explore the full spectrum of my
-          work. I hope you enjoy browsing through my portfolio as much as I
-          enjoyed creating it!
-        </p>
-      </>
-    );
-  };
-
-  const [firstwindowhovervalue, setfirstwindowhovervalue] = useState();
-
-  const getmouseenteronfirstwindow = () => {
-    setfirstwindowhovervalue(
-      <>
-        <p className="text-red-400">Click to view more about me!</p>
-      </>
-    );
-  };
-
   return (
     <motion.div
       ref={constraintsRef}
       className={`${
-        clicked.one || clicked.four || clicked.three || clicked.five
+        clicked.one || clicked.three || clicked.five
           ? "w-[98vw] h-full flex overflow-x-hidden justify-center items-center"
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500 ${
-        isFullscreen
-          ? "w-screen h-screen fixed top-0 left-0 z-[9999] rounded-none"
-          : ""
-      }`}
+      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
+      drag={false}
     >
-      {/* About section with Mac-style close button */}
+      {/* About section */}
       <motion.div
         onClick={(e) =>
           !clicked.one && handleComponentClick("about", e, updateClickedOne)
@@ -497,32 +434,31 @@ const Computerview = () => {
           scale: 1.02,
           boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
         }}
-        className={`  duration-300  ${
+        className={`duration-300 ${
           clicked.two || clicked.three || clicked.five
             ? "hidden"
             : "w-[70%] h-1/2"
         } ${
           clicked.one
-            ? "w-[97.6vw] h-fit px-4 bg-zinc-500  "
-            : "w-[70%] backdrop-blur-xl cursor-pointer h-1/2 overflow-hidden justify-start  gap-4 items-start"
-        }  p-3    bg-zinc-800/50 rounded-xl ${
+            ? "w-[97.6vw] h-fit px-4 bg-zinc-500"
+            : "w-[70%] backdrop-blur-xl cursor-pointer h-1/2 overflow-hidden justify-start gap-4 items-start"
+        } p-3 bg-zinc-800/50 rounded-xl ${
           draggedComponent === "about" ? "z-50" : ""
         }`}
       >
         {clicked.one ? (
-          <div className="w-full max-md:min-h-[250vh] px-6 relative sm:px-24 min-h-[100vh] h-fit flex flex-col justify-start  items-center">
+          <div className="w-full px-6 relative sm:px-24 h-fit flex flex-col justify-start items-center min-h-[100vh]">
             <MacStyleCloseButton
               onClose={() => {
                 getmousexitrofminizebutton();
                 updateClickedOne();
               }}
-              onMinimize={minimizeComponent}
               onMaximize={toggleMaximize}
               componentId="about"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
-            <div className=" flex  w-full justify-center relative flex-col items-center ">
+            <div className=" flex w-full justify-center relative flex-col items-center ">
               <div className="flex justify-start min-h-[5vh] h-fit mt-4 items-center gap-4">
                 <p className="text-5xl font-semibold font-['Aquire']">Hi</p>
                 <picture>
@@ -539,8 +475,8 @@ const Computerview = () => {
                   />
                 </picture>
               </div>
-              <div className="min-h-fit p-3 md:text-xl  lg:text-3xl 2xl:text-3xl w-full h-fit sm:w-[70%] font-['Aquire'] text-center">
-                My name is <span className="font-bold ">Kanishk Soni</span>. I
+              <div className="min-h-fit p-3 md:text-xl lg:text-3xl 2xl:text-3xl w-full h-fit sm:w-[70%] font-['Aquire'] text-center">
+                My name is <span className="font-bold">Kanishk Soni</span>. I
                 live in Jaipur and I am 18 years old. I have been coding for{" "}
                 <span className="font-semibold">{countdown} days</span>. I have
                 completed many projects, but some top projects are mentioned
@@ -548,12 +484,11 @@ const Computerview = () => {
                 you like my portfolio.
               </div>
             </div>
-            <div className="flex mt-3 justify-center relative items-center w-[98vw] overflow-hidden    bg-transparent h-[30vh]  overflow-x-hidden">
+            <div className="flex mt-3 justify-center relative items-center w-[98vw] overflow-hidden bg-transparent h-[30vh] overflow-x-hidden">
               <Animation />
             </div>
-
             <div>
-              <div className=" md:mt-[] w-[95.5w] mt-3 py-4  rounded-2xl flex relative justify- items-start bg-[#141414]  md:">
+              <div className="w-[95.5w] mt-3 py-4 rounded-2xl flex relative justify- items-start bg-[#141414]">
                 <video
                   muted
                   autoPlay
@@ -561,7 +496,7 @@ const Computerview = () => {
                   src={housewithfishvideo}
                   className="w-[30vw] object-cover h-[25vw]"
                 ></video>
-                <div className="text-7xl w-full z-20 top-[17%] h-fit flex justify-center items-center absolute  ">
+                <div className="text-7xl w-full z-20 top-[17%] h-fit flex justify-center items-center absolute">
                   <h1
                     style={{ textShadow: "0px 0px 3px #ffffff" }}
                     className="font-['monument']"
@@ -576,12 +511,8 @@ const Computerview = () => {
             </div>
           </div>
         ) : (
-          <div
-            onMouseEnter={() => getmouseenteronfirstwindow()}
-            onMouseLeave={() => getmouseexitfromfirstwindow()}
-            className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-transparent backdrop-blur-xl rounded-xl"
-          >
-            <div className="rounded-2xl  overflow-hidden w-[25%] h-full">
+          <div className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-transparent backdrop-blur-xl rounded-xl">
+            <div className="rounded-2xl overflow-hidden w-[25%] h-full">
               <PixelTransition
                 firstContent={
                   <img
@@ -618,7 +549,7 @@ const Computerview = () => {
               />
             </div>
             <div className="w-[60%] h-full flex justify-start items-center flex-col">
-              <h1 className="font-bold font-['monument'] bg-clip-text  text-3xl text-transparent bg-gradient-to-l from-red-500 to-purple-700">
+              <h1 className="font-bold font-['monument'] bg-clip-text text-3xl text-transparent bg-gradient-to-l from-red-500 to-purple-700">
                 I&apos;m Kanishk
               </h1>
               <p className="md:text-[13px] lg:text-[1vw] text-center">
@@ -637,7 +568,7 @@ const Computerview = () => {
         )}
       </motion.div>
 
-      {/* Clock section with Mac-style close button */}
+      {/* Clock section */}
       <motion.div
         onClick={(e) =>
           !clicked.two && handleComponentClick("clock", e, updateClickedtwo)
@@ -661,10 +592,13 @@ const Computerview = () => {
         }`}
       >
         {clicked.two ? (
-          <div className="w-full min-h-full gap-1  flex justify-start items-center  h-full rounded-xl ">
+          <div
+            className={`w-full min-h-full gap-1 flex justify-start items-center h-full rounded-xl ${
+              isFullscreen ? "fullscreen-content" : ""
+            }`}
+          >
             <MacStyleCloseButton
               onClose={() => updateClickedtwo()}
-              onMinimize={minimizeComponent}
               onMaximize={toggleMaximize}
               componentId="clock"
               onMouseEnter={getmouseneterofminizebutton}
@@ -689,44 +623,43 @@ const Computerview = () => {
           scale: 1.02,
           boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
         }}
-        className={`  ${
+        className={`${
           clicked.two || clicked.one || clicked.five
             ? "hidden"
             : "w-[30%] h-1/2"
-        }
-  ${
-    clicked.three
-      ? "w-[97.6vw] pt-10 min-h-screen  h-full bg-zinc-800"
-      : "w-[30%] h-1/2 cursor-pointer"
-  }
-     backdrop-blur-2xl relative overflow-hidden  rounded-xl ${
-       draggedComponent === "projects" ? "z-50" : ""
-     }`}
+        } ${
+          clicked.three
+            ? "w-[97.6vw] pt-10 min-h-screen h-full bg-zinc-800"
+            : "w-[30%] h-1/2 cursor-pointer"
+        } backdrop-blur-2xl relative overflow-hidden rounded-xl ${
+          draggedComponent === "projects" ? "z-50" : ""
+        }`}
       >
         {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
-          <div className="w-full h-fit flex flex-col justify-between items-start  min-h-screen ">
+          <div className="w-full h-fit flex flex-col justify-between items-start">
             <MacStyleCloseButton
               onClose={() => updateClickedthree()}
-              onMinimize={minimizeComponent}
               onMaximize={toggleMaximize}
               componentId="projects"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
-            <Projects />
+            <div className="pt-10">
+              <Projects />
+            </div>
           </div>
         ) : (
           <div>
             <video
               src={video}
-              className="w-full h-full object-cover "
+              className="w-full h-full object-cover"
               autoPlay
               muted
               loop
             ></video>
-            <div className=" -top-[0%]  rounded-xl flex justify-center items-center  w-full h-full bg-black absolute mix-blend-multiply selection:bg-black  text-3xl ">
-              <div className="flex justify-center items-center text-7xl font-extrabold ">
+            <div className="-top-[0%] rounded-xl flex justify-center items-center w-full h-full bg-black absolute mix-blend-multiply selection:bg-black text-3xl">
+              <div className="flex justify-center items-center text-7xl font-extrabold">
                 Projects
               </div>
             </div>
@@ -734,38 +667,21 @@ const Computerview = () => {
         )}
       </motion.div>
       <motion.div
-        onClick={(e) =>
-          !clicked.four && handleComponentClick("links", e, updateClickedfour)
-        }
-        drag={!clicked.four}
-        dragConstraints={constraintsRef}
-        onDragStart={(e) => handleDragStart("links", e)}
-        onDragEnd={handleDragEnd}
-        whileDrag={{
-          scale: 1.02,
-          boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
-        }}
-        className={`  ${
-          clicked.two ||
-          clicked.one ||
-          clicked.four ||
-          clicked.three ||
-          clicked.five
+        className={`${
+          clicked.two || clicked.one || clicked.three || clicked.five
             ? "hidden"
             : "w-[30%] h-1/2"
-        } bg-zinc-900/50  backdrop-blur-2xl flex flex-wrap rounded-xl ${
-          draggedComponent === "links" ? "z-50" : ""
-        }`}
+        } bg-zinc-900/50 backdrop-blur-2xl flex flex-wrap rounded-xl`}
       >
         <div className="flex h-1/2 w-1/2 justify-center items-center">
-          <p className="text-5xl  gap-2 font-bold  ">
+          <p className="text-5xl gap-2 font-bold">
             LIN
             <br />
             KS{" "}
           </p>
-          <span className="text-9xl  -mt-10 ">:</span>
+          <span className="text-9xl -mt-10">:</span>
         </div>
-        <div className="w-1/2 h-1/2 ">
+        <div className="w-1/2 h-1/2">
           <a
             target="Black_"
             href="https://www.linkedin.com/in/kanishk-soni-8047a2272/"
@@ -781,7 +697,7 @@ const Computerview = () => {
             </svg>
           </a>
         </div>
-        <div className="w-1/2 h-1/2 ">
+        <div className="w-1/2 h-1/2">
           <a target="Black_" href="https://www.instagram.com/kanishk____soni/">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -794,7 +710,7 @@ const Computerview = () => {
             </svg>
           </a>
         </div>
-        <div className="w-1/2 h-1/2 ">
+        <div className="w-1/2 h-1/2">
           <a target="Black_" href="https://github.com/kanishk1122">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -808,6 +724,8 @@ const Computerview = () => {
           </a>
         </div>
       </motion.div>
+
+      {/* Contact section */}
       <motion.div
         onClick={(e) =>
           !clicked.five && handleComponentClick("contact", e, updateClickedfive)
@@ -820,27 +738,20 @@ const Computerview = () => {
           scale: 1.02,
           boxShadow: "0px 0px 8px rgba(255, 255, 255, 0.3)",
         }}
-        className={`w-[38%] h-1/2  ${
+        className={`w-[38%] h-1/2 ${
           !clicked.five
-            ? clicked.two || clicked.one || clicked.four || clicked.three
+            ? clicked.two || clicked.one || clicked.three
               ? "hidden"
-              : "w-[38%] h-1/2 "
-            : "w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center"
-        } 
-  ${
-    clicked.five
-      ? "w-[96vw]  h-full flex overflow-x-hidden  justify-center items-center"
-      : " w-[38%] h-1/2 "
-  }
-   bg-zinc-800/50  backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl ${
-     draggedComponent === "contact" ? "z-50" : ""
-   }`}
+              : "w-[38%] h-1/2"
+            : "w-[96vw] h-full flex overflow-x-hidden justify-center items-center"
+        } bg-zinc-800/50 backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl ${
+          draggedComponent === "contact" ? "z-50" : ""
+        }`}
       >
         {clicked.five ? (
-          <div className="w-full h-full ">
+          <div className="w-full h-full">
             <MacStyleCloseButton
               onClose={() => updateClickedfive()}
-              onMinimize={minimizeComponent}
               onMaximize={toggleMaximize}
               componentId="contact"
               onMouseEnter={getmouseneterofminizebutton}
@@ -849,7 +760,7 @@ const Computerview = () => {
             <Contact />
           </div>
         ) : (
-          <div className="text-7xl flex justify-start items-center cursor-pointer w-full h-full ">
+          <div className="text-7xl flex justify-start items-center cursor-pointer w-full h-full">
             Contact <br /> ME
             <Contactme />
           </div>
@@ -860,30 +771,6 @@ const Computerview = () => {
       {isDragging && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-full z-[100] text-sm">
           Drag to reposition • Click to expand
-        </div>
-      )}
-
-      {/* Minimized components dock */}
-      {minimizedComponents.length > 0 && (
-        <div className="fixed bottom-4 left-4 flex gap-2 z-50">
-          {minimizedComponents.map((componentId) => (
-            <div
-              key={componentId}
-              className="minimized-component bg-zinc-800/90 rounded-lg p-2 border border-white/20"
-              onClick={() => restoreComponent(componentId)}
-              title={`Restore ${componentId}`}
-            >
-              <div className="w-16 h-12 bg-zinc-700 rounded flex items-center justify-center text-xs">
-                {componentId === "about" && "👋"}
-                {componentId === "clock" && "⏰"}
-                {componentId === "projects" && "💼"}
-                {componentId === "contact" && "📧"}
-              </div>
-              <div className="text-xs text-center mt-1 capitalize">
-                {componentId}
-              </div>
-            </div>
-          ))}
         </div>
       )}
 
