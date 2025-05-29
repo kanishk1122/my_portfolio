@@ -303,8 +303,8 @@ const Computerview = () => {
     return (
       <div id="currentDateTime">
         <div className="text-6xl font-bold"> {currentDateTime.day}</div>
-        <div className="text-6xl font-bold"> {currentDateTime.time}</div>
-min   </div>
+        <div className="text-6xl font-bold"> {currentDateTime.time} min</div>
+      </div>
     );
   }
 
@@ -326,18 +326,122 @@ min   </div>
     );
   };
 
-  // Mac-style button component
-  const MacStyleCloseButton = ({ onClick, onMouseEnter, onMouseLeave }) => (
+  // Mac-style button component with full functionality
+  const MacStyleCloseButton = ({
+    onClose,
+    onMinimize,
+    onMaximize,
+    componentId,
+    onMouseEnter,
+    onMouseLeave,
+  }) => (
     <div
       className="mac-buttons-container absolute left-[2%] top-3 z-50"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="mac-close-button" onClick={onClick} />
-      <div className="mac-minimize-button" />
-      <div className="mac-maximize-button" />
+      <div className="mac-close-button" onClick={onClose} title="Close" />
+      <div
+        className="mac-minimize-button"
+        onClick={() => onMinimize(componentId)}
+        title="Minimize"
+      />
+      <div
+        className="mac-maximize-button"
+        onClick={() => onMaximize(componentId)}
+        title="Maximize"
+      />
     </div>
   );
+
+  // Add state for component management
+  const [minimizedComponents, setMinimizedComponents] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Minimize component function
+  const minimizeComponent = (componentId) => {
+    setMinimizedComponents((prev) => [...prev, componentId]);
+
+    // Close the component
+    switch (componentId) {
+      case "about":
+        updateClickedOne();
+        break;
+      case "clock":
+        updateClickedtwo();
+        break;
+      case "projects":
+        updateClickedthree();
+        break;
+      case "contact":
+        updateClickedfive();
+        break;
+    }
+  };
+
+  // Restore component from minimized state
+  const restoreComponent = (componentId) => {
+    setMinimizedComponents((prev) => prev.filter((id) => id !== componentId));
+
+    // Open the component
+    switch (componentId) {
+      case "about":
+        setSearchParams({ section: "about" });
+        break;
+      case "clock":
+        setSearchParams({ section: "clock" });
+        break;
+      case "projects":
+        setSearchParams({ section: "projects" });
+        break;
+      case "contact":
+        setSearchParams({ section: "contact" });
+        break;
+    }
+  };
+
+  // Maximize/toggle fullscreen
+  const toggleMaximize = (componentId) => {
+    const currentlyOpened =
+      clicked.one || clicked.two || clicked.three || clicked.five;
+
+    if (currentlyOpened && !isFullscreen) {
+      // Enter fullscreen mode
+      setIsFullscreen(true);
+      document.documentElement.requestFullscreen?.();
+    } else if (isFullscreen) {
+      // Exit fullscreen mode
+      setIsFullscreen(false);
+      document.exitFullscreen?.();
+    } else {
+      // Just open the component if not already open
+      switch (componentId) {
+        case "about":
+          setSearchParams({ section: "about" });
+          break;
+        case "clock":
+          setSearchParams({ section: "clock" });
+          break;
+        case "projects":
+          setSearchParams({ section: "projects" });
+          break;
+        case "contact":
+          setSearchParams({ section: "contact" });
+          break;
+      }
+    }
+  };
+
+  // Handle fullscreen change
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
 
   const getmouseexitfromfirstwindow = () => {
     setfirstwindowhovervalue(
@@ -357,21 +461,7 @@ min   </div>
     );
   };
 
-  const [firstwindowhovervalue, setfirstwindowhovervalue] = useState(
-    <>
-      <p>
-        Hey there! I'm <span className="font-bold">Kanishk Soni</span>, an
-        18-year-old coding enthusiast hailing from the vibrant city of Jaipur.
-        Coding has been my passion for{" "}
-        <span className="font-semibold">{countdown} days</span>, and in that
-        time, I've brought several exciting projects to life. While I've
-        completed many, I've highlighted a few of my favorites here. Curious to
-        see more? Dive into my GitHub to explore the full spectrum of my work. I
-        hope you enjoy browsing through my portfolio as much as I enjoyed
-        creating it!
-      </p>
-    </>
-  );
+  const [firstwindowhovervalue, setfirstwindowhovervalue] = useState();
 
   const getmouseenteronfirstwindow = () => {
     setfirstwindowhovervalue(
@@ -388,7 +478,11 @@ min   </div>
         clicked.one || clicked.four || clicked.three || clicked.five
           ? "w-[98vw] h-full flex overflow-x-hidden justify-center items-center"
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
+      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500 ${
+        isFullscreen
+          ? "w-screen h-screen fixed top-0 left-0 z-[9999] rounded-none"
+          : ""
+      }`}
     >
       {/* About section with Mac-style close button */}
       <motion.div
@@ -418,10 +512,13 @@ min   </div>
         {clicked.one ? (
           <div className="w-full max-md:min-h-[250vh] px-6 relative sm:px-24 min-h-[100vh] h-fit flex flex-col justify-start  items-center">
             <MacStyleCloseButton
-              onClick={() => {
+              onClose={() => {
                 getmousexitrofminizebutton();
                 updateClickedOne();
               }}
+              onMinimize={minimizeComponent}
+              onMaximize={toggleMaximize}
+              componentId="about"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
@@ -525,21 +622,15 @@ min   </div>
                 I&apos;m Kanishk
               </h1>
               <p className="md:text-[13px] lg:text-[1vw] text-center">
-                <>
-                  <p>
-                    Hey there! I'm{" "}
-                    <span className="font-bold ">Kanishk Soni</span>, an
-                    18-year-old coding enthusiast hailing from the vibrant city
-                    of Jaipur. Coding has been my passion for{" "}
-                    <span className="font-semibold">{countdown} days</span>, and
-                    in that time, I've brought several exciting projects to
-                    life. While I've completed many, I've highlighted a few of
-                    my favorites here. Curious to see more? Dive into my GitHub
-                    to explore the full spectrum of my work. I hope you enjoy
-                    browsing through my portfolio as much as I enjoyed creating
-                    it!
-                  </p>
-                </>
+                Hey there! I'm <span className="font-bold">Kanishk Soni</span>,
+                an 18-year-old coding enthusiast hailing from the vibrant city
+                of Jaipur. Coding has been my passion for{" "}
+                <span className="font-semibold">{countdown} days</span>, and in
+                that time, I've brought several exciting projects to life. While
+                I've completed many, I've highlighted a few of my favorites
+                here. Curious to see more? Dive into my GitHub to explore the
+                full spectrum of my work. I hope you enjoy browsing through my
+                portfolio as much as I enjoyed creating it!
               </p>
             </div>
           </div>
@@ -572,7 +663,10 @@ min   </div>
         {clicked.two ? (
           <div className="w-full min-h-full gap-1  flex justify-start items-center  h-full rounded-xl ">
             <MacStyleCloseButton
-              onClick={() => updateClickedtwo()}
+              onClose={() => updateClickedtwo()}
+              onMinimize={minimizeComponent}
+              onMaximize={toggleMaximize}
+              componentId="clock"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
@@ -613,7 +707,10 @@ min   </div>
         {clicked.three ? (
           <div className="w-full h-fit flex flex-col justify-between items-start  min-h-screen ">
             <MacStyleCloseButton
-              onClick={() => updateClickedthree()}
+              onClose={() => updateClickedthree()}
+              onMinimize={minimizeComponent}
+              onMaximize={toggleMaximize}
+              componentId="projects"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
@@ -742,7 +839,10 @@ min   </div>
         {clicked.five ? (
           <div className="w-full h-full ">
             <MacStyleCloseButton
-              onClick={() => updateClickedfive()}
+              onClose={() => updateClickedfive()}
+              onMinimize={minimizeComponent}
+              onMaximize={toggleMaximize}
+              componentId="contact"
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
@@ -760,6 +860,37 @@ min   </div>
       {isDragging && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-full z-[100] text-sm">
           Drag to reposition • Click to expand
+        </div>
+      )}
+
+      {/* Minimized components dock */}
+      {minimizedComponents.length > 0 && (
+        <div className="fixed bottom-4 left-4 flex gap-2 z-50">
+          {minimizedComponents.map((componentId) => (
+            <div
+              key={componentId}
+              className="minimized-component bg-zinc-800/90 rounded-lg p-2 border border-white/20"
+              onClick={() => restoreComponent(componentId)}
+              title={`Restore ${componentId}`}
+            >
+              <div className="w-16 h-12 bg-zinc-700 rounded flex items-center justify-center text-xs">
+                {componentId === "about" && "👋"}
+                {componentId === "clock" && "⏰"}
+                {componentId === "projects" && "💼"}
+                {componentId === "contact" && "📧"}
+              </div>
+              <div className="text-xs text-center mt-1 capitalize">
+                {componentId}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Fullscreen indicator */}
+      {isFullscreen && (
+        <div className="fixed top-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full z-[100] text-sm">
+          Press ESC to exit fullscreen
         </div>
       )}
     </motion.div>
