@@ -304,13 +304,14 @@ const Computerview = () => {
       <div id="currentDateTime">
         <div className="text-6xl font-bold"> {currentDateTime.day}</div>
         <div className="text-6xl font-bold"> {currentDateTime.time}</div>
-      </div>
+min   </div>
     );
   }
 
   const getmouseneterofminizebutton = () => {
     setminisizebuttonhovereffecttext("home");
   };
+
   const getmousexitrofminizebutton = () => {
     setminisizebuttonhovereffecttext(
       <svg
@@ -324,6 +325,19 @@ const Computerview = () => {
       </svg>
     );
   };
+
+  // Mac-style button component
+  const MacStyleCloseButton = ({ onClick, onMouseEnter, onMouseLeave }) => (
+    <div
+      className="mac-buttons-container absolute left-[2%] top-3 z-50"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div className="mac-close-button" onClick={onClick} />
+      <div className="mac-minimize-button" />
+      <div className="mac-maximize-button" />
+    </div>
+  );
 
   const getmouseexitfromfirstwindow = () => {
     setfirstwindowhovervalue(
@@ -376,6 +390,7 @@ const Computerview = () => {
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
       } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
     >
+      {/* About section with Mac-style close button */}
       <motion.div
         onClick={(e) =>
           !clicked.one && handleComponentClick("about", e, updateClickedOne)
@@ -402,16 +417,14 @@ const Computerview = () => {
       >
         {clicked.one ? (
           <div className="w-full max-md:min-h-[250vh] px-6 relative sm:px-24 min-h-[100vh] h-fit flex flex-col justify-start  items-center">
-            <button
+            <MacStyleCloseButton
+              onClick={() => {
+                getmousexitrofminizebutton();
+                updateClickedOne();
+              }}
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
-              onClick={() => {
-                getmousexitrofminizebutton(), updateClickedOne();
-              }}
-              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px] absolute left-[0%] px-1 py-1 rounded-full flex justify-center items-center "
-            >
-              {minisizebuttonhovereffecttext}
-            </button>
+            />
             <div className=" flex  w-full justify-center relative flex-col items-center ">
               <div className="flex justify-start min-h-[5vh] h-fit mt-4 items-center gap-4">
                 <p className="text-5xl font-semibold font-['Aquire']">Hi</p>
@@ -533,6 +546,7 @@ const Computerview = () => {
         )}
       </motion.div>
 
+      {/* Clock section with Mac-style close button */}
       <motion.div
         onClick={(e) =>
           !clicked.two && handleComponentClick("clock", e, updateClickedtwo)
@@ -557,14 +571,11 @@ const Computerview = () => {
       >
         {clicked.two ? (
           <div className="w-full min-h-full gap-1  flex justify-start items-center  h-full rounded-xl ">
-            <button
+            <MacStyleCloseButton
+              onClick={() => updateClickedtwo()}
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
-              onClick={() => updateClickedtwo()}
-              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[4%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
-            >
-              {minisizebuttonhovereffecttext}
-            </button>
+            />
             <Clock />
           </div>
         ) : (
@@ -601,14 +612,11 @@ const Computerview = () => {
         {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
           <div className="w-full h-fit flex flex-col justify-between items-start  min-h-screen ">
-            <button
+            <MacStyleCloseButton
+              onClick={() => updateClickedthree()}
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
-              onClick={() => updateClickedthree()}
-              className="bg-white w-[50px] absolute hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[4%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
-            >
-              {minisizebuttonhovereffecttext}
-            </button>
+            />
             <Projects />
           </div>
         ) : (
@@ -733,14 +741,11 @@ const Computerview = () => {
       >
         {clicked.five ? (
           <div className="w-full h-full ">
-            <button
+            <MacStyleCloseButton
+              onClick={() => updateClickedfive()}
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
-              onClick={() => updateClickedfive()}
-              className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px]  left-[94%] top-3 px-1 py-1 rounded-full flex justify-center items-center "
-            >
-              {minisizebuttonhovereffecttext}
-            </button>
+            />
             <Contact />
           </div>
         ) : (

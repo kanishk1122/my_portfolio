@@ -1,35 +1,154 @@
 /* ProjectComponent.css */
 @keyframes bounce-in {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
+  0% {
+    transform: scale(0);
   }
-  
-  @keyframes bounce-out {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(0);
-    }
+  50% {
+    transform: scale(1.2);
   }
-  
-  .videoplayer {
-    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  100% {
+    transform: scale(1);
   }
-  
-  .project-name {
-    transition: color 0.3s ease-in-out;
+}
+
+@keyframes bounce-out {
+  0% {
+    transform: scale(1);
   }
-  
- 
-  
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.videoplayer {
+  animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.project-name {
+  transition: color 0.3s ease-in-out;
+}
+
+/* Mac-style close button styles */
+@keyframes mac-button-hover {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.mac-close-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f57;
+  border: 1px solid #e04842;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mac-close-button:hover {
+  animation: mac-button-hover 0.3s ease;
+  box-shadow: 0 0 8px rgba(255, 95, 87, 0.5);
+}
+
+.mac-close-button::before {
+  content: "×";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #8b0000;
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mac-close-button:hover::before {
+  opacity: 1;
+}
+
+.mac-buttons-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.mac-minimize-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffbd2e;
+  border: 1px solid #dea123;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mac-minimize-button:hover {
+  animation: mac-button-hover 0.3s ease;
+  box-shadow: 0 0 8px rgba(255, 189, 46, 0.5);
+}
+
+.mac-minimize-button::before {
+  content: "−";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #8b6914;
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mac-minimize-button:hover::before {
+  opacity: 1;
+}
+
+.mac-maximize-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #28ca42;
+  border: 1px solid #1aab29;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mac-maximize-button:hover {
+  animation: mac-button-hover 0.3s ease;
+  box-shadow: 0 0 8px rgba(40, 202, 66, 0.5);
+}
+
+.mac-maximize-button::before {
+  content: "⤢";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0d5016;
+  font-size: 8px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mac-maximize-button:hover::before {
+  opacity: 1;
+}
