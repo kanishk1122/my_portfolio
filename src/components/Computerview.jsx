@@ -418,7 +418,9 @@ const Computerview = () => {
         clicked.one || clicked.three || clicked.five
           ? "w-[98vw] h-full flex overflow-x-hidden justify-center items-center"
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500`}
+      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500 ${
+        isFullscreen ? "!mt-0" : ""
+      }`}
       drag={false}
     >
       {/* About section */}
@@ -447,7 +449,11 @@ const Computerview = () => {
         }`}
       >
         {clicked.one ? (
-          <div className="w-full px-6 relative sm:px-24 h-fit flex flex-col justify-start items-center min-h-[100vh]">
+          <div
+            className={`w-full px-6 relative sm:px-24 h-fit flex flex-col justify-start items-center min-h-[100vh] ${
+              isFullscreen ? "pt-0" : ""
+            }`}
+          >
             <MacStyleCloseButton
               onClose={() => {
                 getmousexitrofminizebutton();
@@ -458,8 +464,16 @@ const Computerview = () => {
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
-            <div className=" flex w-full justify-center relative flex-col items-center ">
-              <div className="flex justify-start min-h-[5vh] h-fit mt-4 items-center gap-4">
+            <div
+              className={`flex w-full justify-center relative flex-col items-center ${
+                isFullscreen ? "mt-0" : ""
+              }`}
+            >
+              <div
+                className={`flex justify-start min-h-[5vh] h-fit items-center gap-4 ${
+                  isFullscreen ? "mt-0" : "mt-4"
+                }`}
+              >
                 <p className="text-5xl font-semibold font-['Aquire']">Hi</p>
                 <picture>
                   <source
@@ -594,7 +608,7 @@ const Computerview = () => {
         {clicked.two ? (
           <div
             className={`w-full min-h-full gap-1 flex justify-start items-center h-full rounded-xl ${
-              isFullscreen ? "fullscreen-content" : ""
+              isFullscreen ? "pt-0" : ""
             }`}
           >
             <MacStyleCloseButton
@@ -645,7 +659,7 @@ const Computerview = () => {
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
             />
-            <div className="pt-10">
+            <div className={isFullscreen ? "pt-0" : "pt-10"}>
               <Projects />
             </div>
           </div>
@@ -749,7 +763,7 @@ const Computerview = () => {
         }`}
       >
         {clicked.five ? (
-          <div className="w-full h-full">
+          <div className={`w-full h-full ${isFullscreen ? "pt-0" : ""}`}>
             <MacStyleCloseButton
               onClose={() => updateClickedfive()}
               onMaximize={toggleMaximize}
