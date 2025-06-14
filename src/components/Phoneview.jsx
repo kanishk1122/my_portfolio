@@ -237,9 +237,9 @@ const Phoneview = () => {
       ref={constraintsRef}
       className={`   ${
         clicked.one || clicked.four || clicked.three || clicked.five
-          ? "w-[98vw]  h-fit flex justify-center items-center "
+          ? "w-[98vw]  h-fit flex justify-center items-center overflow-y-auto"
           : "w-[75vw] h-fit items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden  gap-2 rounded-2xl  p-3 duration-500  `}
+      } bg-zinc-900 relative overflow-auto  gap-2 rounded-2xl  p-3 duration-500  `}
     >
       <div
         onClick={() => !clicked.one && updateClickedOne()}
@@ -254,7 +254,7 @@ const Phoneview = () => {
         }  p-3    bg-zinc-800/50 rounded-xl h-fit`}
       >
         {clicked.one ? (
-          <div className="w-full max-md:min-h-fit px-6 relative sm:px-24 min-h-fit h-fit flex flex-col justify-start  items-center">
+          <div className="w-full max-md:min-h-fit px-6 relative sm:px-24 min-h-fit h-fit flex flex-col justify-start items-center overflow-y-auto">
             <button
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -369,14 +369,13 @@ const Phoneview = () => {
         }
   ${
     clicked.three
-      ? "w-full min-h-screen  h-full bg-zinc-800"
+      ? "w-full min-h-screen  h-full bg-zinc-800 overflow-y-auto"
       : "w-full h-fit cursor-pointer"
   }
      backdrop-blur-2xl relative overflow-hidden  rounded-xl`}
       >
-        {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
-          <div className="w-full h-fit flex flex-col justify-between items-start  min-h-screen ">
+          <div className="w-full h-fit flex flex-col justify-between items-start min-h-screen overflow-y-auto">
             <button
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}
@@ -473,17 +472,17 @@ const Phoneview = () => {
             ? clicked.two || clicked.one || clicked.four || clicked.three
               ? "hidden"
               : "w-[100%] h-1/2 "
-            : "w-full min-h-screen  h-full bg-zinc-800"
+            : "w-full min-h-screen  h-full bg-zinc-800 overflow-y-auto"
         }   bg-zinc-800/50  backdrop-blur-2xl flex p-3 flex-col rounded-xl
   ${
     clicked.five
-      ? "w-full min-h-screen  h-full bg-zinc-800"
+      ? "w-full min-h-screen  h-full bg-zinc-800 overflow-y-auto"
       : "w-full h-1/2 cursor-pointer"
   }
   `}
       >
         {clicked.five ? (
-          <div className="w-full h-full ">
+          <div className="w-full h-full overflow-y-auto">
             <button
               onMouseEnter={getmouseneterofminizebutton}
               onMouseLeave={getmousexitrofminizebutton}

@@ -215,8 +215,8 @@ const Desktop = () => {
         wallpapers={wallpapers}
       />
 
-      {/* Enhanced Status Bar in top-right corner */}
-      <div className="fixed top-4 right-4 z-[9999] bg-black/70 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20 shadow-lg">
+      {/* Enhanced Status Bar moved to bottom-right corner with lower z-index */}
+      <div className="fixed bottom-4 right-4 z-[10] bg-black/70 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20 shadow-lg">
         <div className="flex items-center space-x-4 text-white text-sm">
           <div className="text-right">
             <div className="font-medium text-white drop-shadow-md">
@@ -234,14 +234,14 @@ const Desktop = () => {
         </div>
       </div>
 
-      {/* Welcome Message */}
-      <div className="fixed bottom-4 left-4 z-[9999] bg-black/70 backdrop-blur-xl rounded-xl px-6 py-3 border border-white/20 shadow-lg">
+      {/* Welcome Message moved to bottom-left corner */}
+      <div className="fixed bottom-20 left-4 z-[10] bg-black/70 backdrop-blur-xl rounded-xl px-6 py-3 border border-white/20 shadow-lg">
         <div className="text-white">
           <div className="font-semibold text-lg text-white drop-shadow-md">
             Welcome to Kanishk's Desktop
           </div>
           <div className="text-sm text-gray-200 drop-shadow-md">
-            Double-click icons to open applications
+            Click icons to open applications
           </div>
         </div>
       </div>

@@ -532,9 +532,9 @@ const Computerview = () => {
       ref={constraintsRef}
       className={`${
         clicked.one || clicked.three || clicked.five
-          ? "w-[98vw] h-full flex overflow-x-hidden justify-center items-center"
+          ? "w-[98vw] h-full flex overflow-auto justify-center items-center"
           : "w-[75vw] h-[75vh] items-start flex flex-wrap justify-start"
-      } bg-zinc-900 relative overflow-hidden gap-2 rounded-2xl p-3 duration-500 ${
+      } bg-zinc-900 relative overflow-auto gap-2 rounded-2xl p-3 duration-500 ${
         isFullscreen ? "!mt-0" : ""
       }`}
       drag={false}
@@ -556,7 +556,7 @@ const Computerview = () => {
       >
         {clicked.one ? (
           <div
-            className={`w-full px-6 relative sm:px-24 h-fit flex flex-col justify-start items-center min-h-[100vh] ${
+            className={`w-full px-6 relative sm:px-24 h-fit flex flex-col justify-start items-center min-h-[100vh] overflow-y-auto ${
               isFullscreen ? "pt-0" : ""
             }`}
           >
@@ -729,13 +729,13 @@ const Computerview = () => {
             : "w-[30%] h-1/2"
         } ${
           clicked.three
-            ? "w-[97.6vw] pt-10 min-h-screen h-full bg-zinc-800"
+            ? "w-[97.6vw] pt-10 min-h-screen h-full bg-zinc-800 overflow-y-auto"
             : "w-[30%] h-1/2 cursor-pointer"
         } backdrop-blur-2xl relative overflow-hidden rounded-xl`}
       >
         {/* the video is not playing because of ^ upper div */}
         {clicked.three ? (
-          <div className="w-full h-fit flex flex-col justify-between items-start">
+          <div className="w-full h-fit flex flex-col justify-between items-start overflow-y-auto">
             <MacStyleCloseButton
               onClose={() => closeWindow("projects")}
               componentId="projects"
@@ -832,11 +832,15 @@ const Computerview = () => {
             ? clicked.two || clicked.one || clicked.three
               ? "hidden"
               : "w-[38%] h-1/2"
-            : "w-[96vw] h-full flex overflow-x-hidden justify-center items-center"
+            : "w-[96vw] h-full flex overflow-y-auto justify-center items-center"
         } bg-zinc-800/50 backdrop-blur-2xl flex justify-center items-center px-6 p-3 flex-col rounded-xl`}
       >
         {clicked.five ? (
-          <div className={`w-full h-full ${isFullscreen ? "pt-0" : ""}`}>
+          <div
+            className={`w-full h-full overflow-y-auto ${
+              isFullscreen ? "pt-0" : ""
+            }`}
+          >
             <MacStyleCloseButton
               onClose={() => closeWindow("contact")}
               componentId="contact"
