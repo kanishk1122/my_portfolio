@@ -46,33 +46,33 @@ const Contact = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start p-6 text-white font-mono relative overflow-hidden">
+    <div className="w-full h-full flex flex-col items-center justify-start p-4 md:p-6 text-white font-mono relative overflow-y-auto custom-scrollbar">
       
       {/* Background Grid for Tech Feel */}
       <div className="absolute inset-0 opacity-10 pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(#22c55e 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
       </div>
 
-      <div className="max-w-2xl w-full bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-xl p-8 shadow-2xl relative z-10">
+      <div className="max-w-2xl w-full bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-xl p-5 md:p-8 shadow-2xl relative z-10 my-auto">
         
         {/* Header */}
-        <div className="mb-8 border-b border-white/10 pb-4 flex justify-between items-end">
+        <div className="mb-6 md:mb-8 border-b border-white/10 pb-4 flex justify-between items-end">
             <div>
-                <h2 className="text-2xl font-bold text-white tracking-wider">ESTABLISH UPLINK</h2>
-                <p className="text-xs text-zinc-400 mt-1">SECURE CHANNEL: ENCRYPTED</p>
+                <h2 className="text-xl md:text-2xl font-bold text-white tracking-wider">ESTABLISH UPLINK</h2>
+                <p className="text-[10px] md:text-xs text-zinc-400 mt-1">SECURE CHANNEL: ENCRYPTED</p>
             </div>
             <div className="flex gap-2">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse delay-75" />
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse delay-150" />
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-500 rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-500 rounded-full animate-pulse delay-75" />
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full animate-pulse delay-150" />
             </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
           
           {/* Name Input */}
           <div className="group relative">
-            <label className="text-xs text-green-500 mb-1 block uppercase tracking-widest group-focus-within:text-white transition-colors">
+            <label className="text-[10px] md:text-xs text-green-500 mb-1 block uppercase tracking-widest group-focus-within:text-white transition-colors">
                 // Identification
             </label>
             <input
@@ -82,17 +82,18 @@ const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
+              // text-base on mobile prevents iOS zoom on focus, text-sm on desktop looks cleaner
+              className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-base md:text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
             />
-            <div className="absolute right-3 top-8 opacity-0 group-focus-within:opacity-100 transition-opacity text-green-500 text-xs animate-pulse">
+            <div className="absolute right-3 top-8 opacity-0 group-focus-within:opacity-100 transition-opacity text-green-500 text-xs animate-pulse hidden md:block">
                 _cursor
             </div>
           </div>
 
           {/* Email & Mobile Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
              <div className="group">
-                <label className="text-xs text-green-500 mb-1 block uppercase tracking-widest">
+                <label className="text-[10px] md:text-xs text-green-500 mb-1 block uppercase tracking-widest">
                     // Frequency (Email)
                 </label>
                 <input
@@ -102,11 +103,11 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
+                  className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-base md:text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
                 />
              </div>
              <div className="group">
-                <label className="text-xs text-green-500 mb-1 block uppercase tracking-widest">
+                <label className="text-[10px] md:text-xs text-green-500 mb-1 block uppercase tracking-widest">
                     // Signal (Mobile)
                 </label>
                 <input
@@ -115,14 +116,14 @@ const Contact = () => {
                   placeholder="+91 00000 00000"
                   value={formData.mobile}
                   onChange={handleChange}
-                  className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
+                  className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-base md:text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700"
                 />
              </div>
           </div>
 
           {/* Message Area */}
           <div className="group">
-            <label className="text-xs text-green-500 mb-1 block uppercase tracking-widest">
+            <label className="text-[10px] md:text-xs text-green-500 mb-1 block uppercase tracking-widest">
                 // Data Packet (Message)
             </label>
             <textarea
@@ -131,24 +132,51 @@ const Contact = () => {
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700 resize-none custom-scrollbar"
+              className="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-base md:text-sm focus:outline-none focus:border-green-500 focus:bg-black/60 transition-all placeholder:text-zinc-700 resize-none custom-scrollbar"
             ></textarea>
           </div>
 
-          {/* Action Area & Status */}
-          <div className="mt-4 flex items-center justify-between">
+          {/* Action Area & Status - Flex Reverse on mobile to put button bottom */}
+          <div className="mt-2 md:mt-4 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
               
+              {/* Status Message */}
+              <div className="h-6 flex items-center justify-center sm:justify-start">
+                  <AnimatePresence mode="wait">
+                      {status === "SUCCESS" && (
+                          <motion.div 
+                            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                            className="flex items-center gap-2 text-green-400 text-[10px] md:text-xs font-mono"
+                          >
+                              <CheckCircle size={14} /> {responseMsg}
+                          </motion.div>
+                      )}
+                      {status === "ERROR" && (
+                          <motion.div 
+                            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                            className="flex items-center gap-2 text-red-500 text-[10px] md:text-xs font-mono"
+                          >
+                              <AlertTriangle size={14} /> {responseMsg}
+                          </motion.div>
+                      )}
+                      {status === "IDLE" && (
+                          <div className="text-zinc-600 text-[10px] md:text-xs font-mono animate-pulse">
+                              AWAITING INPUT...
+                          </div>
+                      )}
+                  </AnimatePresence>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={status === "LOADING"}
                 className={`
-                    relative px-6 py-3 font-bold text-sm uppercase tracking-widest overflow-hidden transition-all
+                    relative w-full sm:w-auto px-6 py-3 font-bold text-xs md:text-sm uppercase tracking-widest overflow-hidden transition-all
                     ${status === "LOADING" ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" : "bg-white text-black hover:bg-green-400 hover:scale-[1.02] active:scale-95"}
                 `}
-                style={{ clipPath: "polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)" }} // Cyberpunk Shape
+                style={{ clipPath: "polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)" }}
               >
-                <span className="relative z-10 flex items-center gap-2">
+                <span className="relative z-10 flex items-center justify-center gap-2">
                     {status === "LOADING" ? (
                         <>UPLOADING <Loader2 size={16} className="animate-spin" /></>
                     ) : (
@@ -157,30 +185,6 @@ const Contact = () => {
                 </span>
               </button>
 
-              {/* Status Message */}
-              <AnimatePresence mode="wait">
-                  {status === "SUCCESS" && (
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                        className="flex items-center gap-2 text-green-400 text-xs font-mono"
-                      >
-                          <CheckCircle size={16} /> {responseMsg}
-                      </motion.div>
-                  )}
-                  {status === "ERROR" && (
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                        className="flex items-center gap-2 text-red-500 text-xs font-mono"
-                      >
-                          <AlertTriangle size={16} /> {responseMsg}
-                      </motion.div>
-                  )}
-                  {status === "IDLE" && (
-                      <div className="text-zinc-600 text-xs font-mono animate-pulse">
-                          AWAITING INPUT...
-                      </div>
-                  )}
-              </AnimatePresence>
           </div>
 
         </form>

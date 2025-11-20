@@ -311,7 +311,7 @@ const Phoneview = () => {
           onClick={() => handleCardClick("five")}
           className={`
             bg-zinc-800/50 backdrop-blur-md rounded-2xl cursor-pointer transition-all duration-500
-            ${activeCard === "five" ? "w-full max-h-[90vh] order-1" : activeCard ? "hidden" : "col-span-2 md:col-span-2 h-32 md:h-80 flex justify-center items-center"}
+            ${activeCard === "five" ? "w-full min-h-[90vh] order-1" : activeCard ? "hidden" : "col-span-2 md:col-span-2 h-32 md:h-80 flex justify-center items-center"}
           `}
         >
           {activeCard === "five" ? (
