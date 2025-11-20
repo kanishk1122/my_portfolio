@@ -27,7 +27,7 @@ const Home = () => {
   return (
     // 1. FIX: Use h-screen and overflow-hidden to prevent browser scrolling
     // 2. FIX: Use w-screen to ensure full width without accidental horizontal scroll
-    <div className="w-screen h-screen bg-black text-white overflow-hidden cursor-none relative">
+    <div className="w-screen h-fit bg-black text-white overflow-hidden cursor-none relative">
       
       {/* Navbar Layer */}
       <div className="absolute top-0 left-0 w-full z-50">
@@ -41,7 +41,7 @@ const Home = () => {
 
       {/* Main Content Layer */}
       {/* 3. FIX: Removed mt-[10vh] and mb-10. The OS needs the full container. */}
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="w-full h-fit flex justify-center items-center">
         {isSmallScreen ? <Phoneview /> : <Computerview />}
       </div>
     </div>
