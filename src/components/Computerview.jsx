@@ -514,9 +514,14 @@ const Computerview = () => {
                   {activeSection === "links" && (
                       <WindowFrame title="EXTERNAL_NETWORKS" onClose={handleClose} constraintsRef={constraintsRef}>
                            <div className="w-full h-full flex flex-col items-center justify-center gap-6">
-                                {['GITHUB', 'LINKEDIN', 'INSTAGRAM'].map(link => (
-                                    <a key={link} href="#" className="text-2xl font-['monument'] text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 hover:to-green-400 transition-all">
-                                        {link}
+                                {[{name : 'GITHUB',
+                                  link : "https://github.com/kanishk1122"
+                                }, {
+                                    name : 'LINKEDIN',
+                                    link : "https://www.linkedin.com/in/kanishk-21-soni/"
+                                }].map(link => (
+                                    <a key={link.name} target="_blank" rel="noopener noreferrer" href={link.link} className="text-2xl font-['monument'] text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 hover:to-green-400 transition-all">
+                                        {link.name}
                                     </a>
                                 ))}
                            </div>
