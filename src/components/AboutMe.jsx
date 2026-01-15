@@ -53,7 +53,7 @@ const AboutMe = () => {
         
         <div className="max-w-2xl text-center font-mono text-lg md:text-xl leading-relaxed">
           My name is <span className="text-green-500 font-bold">Kanishk Soni</span>. I
-          live in Jaipur and I am 18 years old. I have been coding for{" "}
+          live in Jaipur and I am {new Date().getFullYear() - 2005} years old. I have been coding for{" "}
           <span className="bg-green-500/20 text-green-400 px-2 rounded border border-green-500/30">
             {countdown} days
           </span>. I have completed many projects, and I hope you like my portfolio.
