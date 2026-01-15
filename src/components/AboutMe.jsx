@@ -60,26 +60,7 @@ const AboutMe = () => {
         </div>
       </div>
 
-      {/* Visualizer / Animation Section */}
-      <div className="w-full h-[200px] mb-12 bg-zinc-900/30 rounded-2xl border border-white/5 overflow-hidden relative flex items-center justify-center">
-        <div className="absolute inset-0 flex flex-col gap-2 p-4 opacity-20 font-mono text-[10px]">
-           {[...Array(10)].map((_, i) => (
-             <div key={i} className="flex gap-4">
-                <span>[LOG_{i*123}]</span>
-                <span>DATA_STREAM_ACTIVE_{Math.random().toString(36).substring(7).toUpperCase()}</span>
-                <span className="ml-auto text-green-500">READY</span>
-             </div>
-           ))}
-        </div>
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ repeat: Infinity, duration: 4 }}
-          className="z-10 text-4xl font-black tracking-[0.5em] text-white/10 uppercase italic"
-        >
-          Visual_Matrix
-        </motion.div>
-      </div>
-
+      
       {/* Skills Section */}
       <div className="w-full bg-zinc-900/50 rounded-3xl border border-white/10 p-8 relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent opacity-30"></div>
