@@ -1,111 +1,131 @@
-import React from 'react'
-import TextTransition, { presets } from "react-text-transition";
+import { useEffect,  useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 
-const AboutMe = ({
-    countdown,
-    skillsComponents,
-    housewithfishvideo,
-    mypic,
-    firstwindowhovervalue,
-    clicked,
-    minisizebuttonhovereffecttext,
-    getmousexitrofminizebutton,
-    updateClickedOne,
-    getmouseenteronfirstwindow,
-    getmouseexitfromfirstwindow}) => {
+// --- INTERNALIZED ABOUT ME COMPONENT (NO PROPS) ---
+const AboutMe = () => {
+  const [countdown, setCountdown] = useState(0);
+  const [textIndex, setTextIndex] = useState(0);
+  
+  const skills = [
+    "Express.js", "React", "Next.js", "GSAP", "mySQL", "PostgreSQL", 
+    "Javascript", "Java", "C++", "DSA", "Python", "Tailwind", 
+    "TypeScript", "MongoDB", "AWS", "FLASK", "KAFKA"
+  ];
+
+  const hoverValues = [
+    "Building Digital Ecosystems",
+    "Full Stack Architect",
+    "Creative Developer",
+    "Problem Solver"
+  ];
+
+  useEffect(() => {
+    // Calculate days since start (Aug 27, 2023)
+    const startDate = new Date("2023-08-27");
+    const now = new Date();
+    const diff = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
+    setCountdown(diff);
+
+    // Text rotation interval
+    const textInterval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % hoverValues.length);
+    }, 3000);
+
+    return () => clearInterval(textInterval);
+  }, []);
+
   return (
-    clicked?.one ? (
-        <div className="w-full max-md:min-h-[250vh] px-6 relative sm:px-24 min-h-[100vh] h-fit flex flex-col justify-start  items-center">
-          <button
-            onMouseEnter={getmouseneterofminizebutton}
-            onMouseLeave={getmousexitrofminizebutton}
-            onClick={() => {
-              getmousexitrofminizebutton(), updateClickedOne();
-            }}
-            className="bg-white w-[50px]  hover:h-[60px] hover:w-[60px] text-black  font-semibold duration-200 h-[50px] absolute left-[0%] px-1 py-1 rounded-full flex justify-center items-center "
-          >
-            {minisizebuttonhovereffecttext}
-          </button>
-          <div className=" flex  w-full justify-center relative flex-col items-center ">
-            <div className="flex justify-start min-h-[5vh] h-fit mt-4 items-center gap-4">
-              <p className="text-5xl font-semibold font-['Aquire']">Hi</p>
-              <picture>
-                <source
-                  className="w-fit"
-                  srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b/512.webp"
-                  type="image/webp"
-                />
-                <img
-                  src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b/512.gif"
-                  alt="👋"
-                  width="32"
-                  height="32"
-                />
-              </picture>
-            </div>
-            <div className="min-h-fit p-3 md:text-xl  lg:text-3xl 2xl:text-3xl w-full h-fit sm:w-[70%] font-['Aquire'] text-center">
-              My name is <span className="font-bold ">Kanishk Soni</span>. I
-              live in Jaipur and I am 18 years old. I have been coding for{" "}
-              <span className="font-semibold">{countdown} days</span>. I have
-              completed many projects, but some top projects are mentioned
-              here. You can visit my GitHub to view all my projects. I hope
-              you like my portfolio.
-            </div>
-          </div>
-          <div className="flex mt-3 justify-center relative items-center w-[98vw] overflow-hidden    bg-transparent h-[30vh]  overflow-x-hidden">
-            <Animation />
-          </div>
-
-          <div>
-            <div className=" md:mt-[] w-[95.5w] mt-3 py-4  rounded-2xl flex relative justify- items-start bg-[#141414]  md:">
-              <video
-                muted
-                autoPlay
-                loop
-                src={housewithfishvideo}
-                className="w-[30vw] object-cover h-[25vw]"
-              ></video>
-              <div className="text-7xl w-full z-20 top-[17%] h-fit flex justify-center items-center absolute  ">
-                <h1
-                  style={{ textShadow: "0px 0px 3px #ffffff" }}
-                  className="font-['monument']"
-                >
-                  MY know tech
-                </h1>
-              </div>
-              <div className="flex flex-wrap gap-3 z-20 pt-[10%] bg-transparent w-[97vw] h-[75%] justify-center items-center px-[10vw]">
-                {skillsComponents}
-              </div>
-            </div>
-          </div>
+    <div className="w-full flex flex-col items-center py-8 px-4 md:px-12 text-white">
+      {/* Introduction Header */}
+      <div className="flex flex-col items-center gap-4 mb-8">
+        <div className="flex items-center gap-4">
+          <p className="text-5xl font-bold font-mono tracking-tighter">Hi</p>
+          <motion.img
+            src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b/512.gif"
+            alt="👋"
+            width="48"
+            height="48"
+            animate={{ rotate: [0, 20, 0, 20, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          />
         </div>
-      ) : (
-        <div
-          onMouseEnter={() => getmouseenteronfirstwindow()}
-          onMouseLeave={() => getmouseexitfromfirstwindow()}
-          className="duration-300 w-full h-full flex cursor-pointer justify-start p-3 gap-4 items-start bg-transparent backdrop-blur-xl rounded-xl"
+        
+        <div className="max-w-2xl text-center font-mono text-lg md:text-xl leading-relaxed">
+          My name is <span className="text-green-500 font-bold">Kanishk Soni</span>. I
+          live in Jaipur and I am 18 years old. I have been coding for{" "}
+          <span className="bg-green-500/20 text-green-400 px-2 rounded border border-green-500/30">
+            {countdown} days
+          </span>. I have completed many projects, and I hope you like my portfolio.
+        </div>
+      </div>
+
+      {/* Visualizer / Animation Section */}
+      <div className="w-full h-[200px] mb-12 bg-zinc-900/30 rounded-2xl border border-white/5 overflow-hidden relative flex items-center justify-center">
+        <div className="absolute inset-0 flex flex-col gap-2 p-4 opacity-20 font-mono text-[10px]">
+           {[...Array(10)].map((_, i) => (
+             <div key={i} className="flex gap-4">
+                <span>[LOG_{i*123}]</span>
+                <span>DATA_STREAM_ACTIVE_{Math.random().toString(36).substring(7).toUpperCase()}</span>
+                <span className="ml-auto text-green-500">READY</span>
+             </div>
+           ))}
+        </div>
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ repeat: Infinity, duration: 4 }}
+          className="z-10 text-4xl font-black tracking-[0.5em] text-white/10 uppercase italic"
         >
-          <div className="rounded-2xl  overflow-hidden w-[25%] h-full">
-            <img
-              src={mypic}
-              className="w-full duration-200 h-full object-cover"
-              alt=""
-            />
-          </div>
-          <div className="w-[60%] h-full flex justify-start items-center flex-col">
-            <h1 className="font-bold font-['monument'] bg-clip-text  text-3xl text-transparent bg-gradient-to-l from-red-500 to-purple-700">
-              I&apos;m Kanishk
-            </h1>
-            <p className="md:text-[13px] lg:text-[1vw] text-center">
-              <TextTransition springConfig={presets.wobbly}>
-                {firstwindowhovervalue}
-              </TextTransition>
-            </p>
+          Visual_Matrix
+        </motion.div>
+      </div>
+
+      {/* Skills Section */}
+      <div className="w-full bg-zinc-900/50 rounded-3xl border border-white/10 p-8 relative overflow-hidden group">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent opacity-30"></div>
+        
+        <div className="relative z-20 flex flex-col items-center">
+          <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tighter uppercase italic opacity-20 select-none">
+            Tech Stack
+          </h2>
+          
+          <div className="flex flex-wrap justify-center gap-3">
+            {skills.map((skill, i) => (
+              <motion.span
+                key={skill}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                className="bg-black/60 border border-white/10 px-4 py-2 rounded-xl text-xs font-mono text-zinc-300 hover:border-green-500 hover:text-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-default"
+              >
+                {skill}
+              </motion.span>
+            ))}
           </div>
         </div>
-      )
-  )
-}
 
-export default AboutMe
+        {/* Decorative elements */}
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-green-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl"></div>
+      </div>
+      
+      {/* Floating Status Bar inside the window */}
+      <div className="mt-8 flex items-center gap-4 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+         <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Currently:</span>
+         <AnimatePresence mode="wait">
+            <motion.span
+              key={textIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-[10px] font-mono text-green-400 uppercase tracking-widest font-bold"
+            >
+              {hoverValues[textIndex]}
+            </motion.span>
+         </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+export default AboutMe;

@@ -1,69 +1,47 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { 
+  X, 
+  Maximize2, 
+  Minimize2, 
+  User, 
+  Briefcase, 
+  Clock as ClockIcon, 
+  Mail, 
+  Globe, 
+  Terminal,
+  Cpu
+} from "lucide-react";
 
-// --- ASSETS (Ensure these paths are correct for your project) ---
-import mypic from "../public/images/Untitled-transformed.jpeg";
-import video from "/videos/workportfilio.mp4";
-import housewithfishvideo from "../assets/original.mp4";
-
-// --- INTERNAL UTILS ---
-import PixelTransition from "./utils/Pixelimage";
-import Animation from "./Animationtest";
-
-// --- LAZY IMPORTS ---
-const Clock = lazy(() => import("./Clock"));
+// --- EXTERNAL COMPONENT IMPORTS ---
+// Assuming these exist in your local project directory
+const AboutUs = lazy(() => import("./AboutMe")); 
 const Projects = lazy(() => import("./Projects"));
 const Contact = lazy(() => import("./Contact"));
+const Clock = lazy(() => import("./Clock"));
+const LeetCodeStats = lazy(() => import("./LeetCodeStats"));
 
-gsap.registerPlugin(ScrollTrigger);
-
-// --- SOUNDS ---
-const grabSoundUrl = "/sounds/grab.mp3";
-const dropSoundUrl = "/sounds/drop.mp3";
-
+// --- DYNAMIC BACKGROUND COMPONENT ---
 const BG = () => {
   const canvasRef = useRef(null);
   
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    
-    // Optimize for pixel art / sharp edges
     ctx.imageSmoothingEnabled = false;
 
     let animationFrameId;
-    let width, height;
-    let cx, cy;
-
-    // Movement State
+    let width, height, cx, cy;
     let mouse = { x: 0, y: 0 };
     let targetMouse = { x: 0, y: 0 };
 
-    // Entities
     const stars = [];
-    const debris = [];
-    const numStars = 500;
-    
-    // Initialize Stars
-    for (let i = 0; i < numStars; i++) {
+    for (let i = 0; i < 400; i++) {
       stars.push({
         x: (Math.random() - 0.5) * 2000,
         y: (Math.random() - 0.5) * 2000,
         z: Math.random() * 2,
-      });
-    }
-
-    // Initialize Floating Debris
-    for (let i = 0; i < 6; i++) {
-      debris.push({
-        x: (Math.random() - 0.5) * 3000,
-        y: (Math.random() - 0.5) * 3000,
-        z: Math.random() * 2 + 1,
-        type: Math.random() > 0.5 ? 'triangle' : 'circle'
       });
     }
 
@@ -77,473 +55,287 @@ const BG = () => {
     };
 
     const handleMouseMove = (e) => {
-      targetMouse.x = (e.clientX - cx) / (cx * 0.5); // Sensitivity
+      targetMouse.x = (e.clientX - cx) / (cx * 0.5);
       targetMouse.y = (e.clientY - cy) / (cy * 0.5);
-    };
-
-    const handleTouchMove = (e) => {
-      if (e.touches.length > 0) {
-        targetMouse.x = (e.touches[0].clientX - cx) / (cx * 0.5);
-        targetMouse.y = (e.touches[0].clientY - cy) / (cy * 0.5);
-      }
     };
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
     handleResize();
 
-    // --- Drawing Helpers ---
-    const drawDot = (x, y, size, opacity) => {
-      ctx.fillStyle = `rgba(200, 255, 255, ${opacity})`;
-      ctx.fillRect(Math.floor(x), Math.floor(y), size, size);
-    };
-
-    const drawDotShape = (objX, objY, scale, type) => {
-        const dotSize = 2 * scale;
-        const spacing = 8 * scale;
-        ctx.fillStyle = `rgba(200, 255, 255, ${Math.min(1, scale)})`;
-        
-        if (type === 'triangle') {
-            ctx.fillRect(objX, objY - spacing, dotSize, dotSize);
-            ctx.fillRect(objX - spacing/2, objY, dotSize, dotSize);
-            ctx.fillRect(objX + spacing/2, objY, dotSize, dotSize);
-            ctx.fillRect(objX - spacing, objY + spacing, dotSize, dotSize);
-            ctx.fillRect(objX, objY + spacing, dotSize, dotSize);
-            ctx.fillRect(objX + spacing, objY + spacing, dotSize, dotSize);
-        } else {
-            ctx.fillRect(objX, objY, dotSize, dotSize);
-            ctx.fillRect(objX - spacing, objY, dotSize, dotSize);
-            ctx.fillRect(objX + spacing, objY, dotSize, dotSize);
-            ctx.fillRect(objX, objY - spacing, dotSize, dotSize);
-            ctx.fillRect(objX, objY + spacing, dotSize, dotSize);
-        }
-    };
-
-    // --- Main Render Loop ---
     const render = () => {
-      // 1. Movement Physics
       mouse.x += (targetMouse.x - mouse.x) * 0.05;
       mouse.y += (targetMouse.y - mouse.y) * 0.05;
 
-      // 2. Clear Screen (Black)
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, width, height);
 
-      // 3. Draw Stars
       stars.forEach(star => {
-        star.x -= mouse.x * 10; 
-        star.y -= mouse.y * 10;
-        star.z -= 0.01;
-
-        if (star.z <= 0 || Math.abs(star.x) > 3000 || Math.abs(star.y) > 3000) {
-            star.z = 2;
-            star.x = (Math.random() - 0.5) * 2000;
-            star.y = (Math.random() - 0.5) * 2000;
-        }
-
-        const k = 200 / star.z;
-        const px = cx + star.x / star.z;
-        const py = cy + star.y / star.z;
+        star.z -= 0.005;
+        if (star.z <= 0) star.z = 2;
+        
+        const px = cx + (star.x - mouse.x * 50) / star.z;
+        const py = cy + (star.y - mouse.y * 50) / star.z;
 
         if (px > 0 && px < width && py > 0 && py < height) {
-            const size = Math.max(1, (2 - star.z) * 2);
-            drawDot(px, py, size, 1);
+          const size = (1 - star.z / 2) * 3;
+          ctx.fillStyle = `rgba(255, 255, 255, ${1 - star.z / 2})`;
+          ctx.fillRect(px, py, size, size);
         }
       });
-
-      // 4. Draw Debris
-      debris.forEach(obj => {
-          obj.z -= 0.01;
-          obj.x -= mouse.x * 15;
-          obj.y -= mouse.y * 15;
-
-          if (obj.z <= 0.2) {
-              obj.z = 3;
-              obj.x = (Math.random() - 0.5) * 3000;
-              obj.y = (Math.random() - 0.5) * 3000;
-          }
-
-          const px = cx + obj.x / obj.z;
-          const py = cy + obj.y / obj.z;
-          
-          if (px > -100 && px < width + 100 && py > -100 && py < height + 100) {
-            drawDotShape(px, py, 1/obj.z, obj.type);
-          }
-      });
-
-      // 5. Draw Player Ship (Monochrome White Style)
-      const shipX = cx + mouse.x * 30;
-      const shipY = cy + mouse.y * 30;
-      const s = 3; // pixel size scale
-
-      ctx.fillStyle = '#ffffff';
-      // Main fuselage
-      ctx.fillRect(shipX - s*2, shipY - s*3, s*4, s*6);
-      // Wings
-      ctx.fillRect(shipX - s*4, shipY + s*1, s*2, s*2);
-      ctx.fillRect(shipX + s*2, shipY + s*1, s*2, s*2);
-      // Thrusters
-      ctx.fillRect(shipX - s*3, shipY + s*3, s*2, s*3);
-      ctx.fillRect(shipX + s*1, shipY + s*3, s*2, s*3);
-      // Engine Flicker
-      if (Math.random() > 0.2) {
-          ctx.fillRect(shipX - s*2, shipY + s*6, s*1, s*2);
-          ctx.fillRect(shipX + s*1, shipY + s*6, s*1, s*2);
-      }
 
       animationFrameId = requestAnimationFrame(render);
     };
 
     render();
-
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
-return (
-    // CHANGE THIS LINE:
-    <div className="absolute inset-0 w-full h-full bg-black overflow-hidden z-0">
-      
-      {/* Full Screen Canvas */}
-      <canvas 
-        ref={canvasRef} 
-        className="absolute top-0 left-0 w-full h-full block"
-      />
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-50" />;
+};
 
-      {/* Subtle CRT Scanlines Overlay */}
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[length:100%_3px] bg-repeat-y bg-gradient-to-b from-white via-transparent to-white" style={{backgroundSize: '100% 4px'}} />
-      
+// --- IMPROVED WINDOW FRAME ---
+const WindowFrame = ({ title, children, onClose, active }) => {
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  return (
+    <motion.div
+      drag={!isMaximized}
+      dragMomentum={false}
+      initial={{ scale: 0.9, opacity: 0, y: 20 }}
+      animate={{ 
+        scale: 1, 
+        opacity: 1,
+        zIndex: active ? 100 : 10,
+        width: isMaximized ? "100vw" : "clamp(360px, 85vw, 1000px)",
+        height: isMaximized ? "calc(100vh - 80px)" : "650px",
+        top: isMaximized ? 0 : "8%",
+        left: isMaximized ? 0 : "auto",
+        right: isMaximized ? 0 : "auto",
+        margin: isMaximized ? 0 : "auto"
+      }}
+      exit={{ scale: 0.9, opacity: 0, transition: { duration: 0.2 } }}
+      className={`absolute inset-x-0 mx-auto flex flex-col bg-[#0c0c0e]/95 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden ${isMaximized ? "rounded-none" : "rounded-2xl"}`}
+    >
+      {/* Header / Title Bar */}
+      <div 
+        className="h-14 bg-zinc-900/50 border-b border-white/5 flex items-center justify-between px-5 select-none cursor-grab active:cursor-grabbing"
+        onDoubleClick={() => setIsMaximized(!isMaximized)}
+      >
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-green-500/10 rounded-lg">
+            <Cpu size={16} className="text-green-500" />
+          </div>
+          <span className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-widest">{title}</span>
+        </div>
+
+        <div className="flex gap-2">
+          <button 
+            onClick={() => setIsMaximized(!isMaximized)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 transition-colors"
+          >
+            {isMaximized ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+          </button>
+          <button 
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all"
+          >
+            <X size={20} />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-6 relative custom-scrollbar">
+        <Suspense fallback={
+          <div className="flex items-center justify-center h-full font-mono text-green-500 animate-pulse tracking-widest">
+            LOADING_RESOURCES...
+          </div>
+        }>
+          {children}
+        </Suspense>
+        {/* Subtle Scanline Overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_4px] opacity-20" />
+      </div>
+    </motion.div>
+  );
+};
+
+// --- REUSABLE DESKTOP ICON ---
+const DesktopIcon = ({ label, icon: Icon, onClick, active }) => (
+  <motion.button
+    whileHover={{ scale: 1.05, y: -5 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={onClick}
+    className={`flex flex-col items-center gap-3 w-24 md:w-28 group transition-all`}
+  >
+    <div className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-2xl border backdrop-blur-md transition-all duration-300 ${
+      active 
+        ? "bg-green-500/20 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
+        : "bg-white/5 border-white/10 group-hover:bg-white/10 group-hover:border-white/20"
+    }`}>
+      <Icon size={32} className={active ? "text-green-400" : "text-white/70 group-hover:text-white"} />
+    </div>
+    <span className={`text-[10px] font-mono uppercase tracking-widest py-1 px-3 rounded-full border transition-all ${
+      active ? "bg-green-500 text-black border-green-500" : "bg-black/50 text-zinc-400 border-white/5"
+    }`}>
+      {label}
+    </span>
+  </motion.button>
+);
+
+const App = () => {
+  // Switched to useState to avoid Router context errors in standard environments
+  const [activeSection, setActiveSection] = useState(null);
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }));
+    }, 1000);
+    return () => clearInterval(i);
+  }, []);
+
+  const handleOpen = (section) => setActiveSection(section);
+  const handleClose = () => setActiveSection(null);
+
+  const apps = [
+    { id: "about", label: "Identity", icon: User },
+    { id: "projects", label: "Work", icon: Briefcase },
+    { id: "clock", label: "Time", icon: ClockIcon },
+    { id: "contact", label: "Uplink", icon: Mail },
+    { id: "links", label: "Net", icon: Globe },
+    { id: "leetcode", label: "LeetCode", icon: Terminal },
+  ];
+
+  return (
+    <div className="w-full h-screen bg-black overflow-hidden flex flex-col text-white font-sans selection:bg-green-500/40">
+      <BG />
+
+      {/* Main Desktop Grid */}
+      <main className="flex-1 p-8 md:p-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 items-start content-start relative z-10">
+        {apps.map((app) => (
+          <DesktopIcon 
+            key={app.id} 
+            {...app} 
+            active={activeSection === app.id}
+            onClick={() => handleOpen(app.id)} 
+          />
+        ))}
+      </main>
+
+      {/* Active Window Layer */}
+      <AnimatePresence>
+        {activeSection === "about" && (
+          <WindowFrame title="SYSTEM // USER_PROFILE" onClose={handleClose} active>
+             {/* Using your imported AboutUs component */}
+             <AboutUs />
+          </WindowFrame>
+        )}
+
+        {activeSection === "projects" && (
+          <WindowFrame title="REPOS // DEPLOYED_WORK" onClose={handleClose} active>
+             {/* Using your imported Projects component */}
+             <Projects />
+          </WindowFrame>
+        )}
+
+        {activeSection === "clock" && (
+          <WindowFrame title="CHRONOS // ENGINE" onClose={handleClose} active>
+             <div className="h-full flex flex-col items-center justify-center gap-4">
+                <Clock />
+                <p className="font-mono text-green-500/50 uppercase text-[10px] tracking-[0.4em]">Local System Sync Active</p>
+             </div>
+          </WindowFrame>
+        )}
+
+        {activeSection === "contact" && (
+          <WindowFrame title="COMMS // SECURE_LINE" onClose={handleClose} active>
+             <Contact />
+          </WindowFrame>
+        )}
+
+        {activeSection === "links" && (
+           <WindowFrame title="NETWORK // EXTERNAL" onClose={handleClose} active>
+              <div className="grid gap-4 max-w-sm mx-auto pt-10">
+                <a href="https://github.com" target="_blank" rel="noreferrer" className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 flex items-center justify-between group transition-all hover:border-green-500/50">
+                  <span className="font-mono uppercase tracking-widest group-hover:text-green-400">GitHub Repository</span>
+                  <Globe size={16} />
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 flex items-center justify-between group transition-all hover:border-green-500/50">
+                  <span className="font-mono uppercase tracking-widest group-hover:text-green-400">LinkedIn Network</span>
+                  <Globe size={16} />
+                </a>
+              </div>
+           </WindowFrame>
+        )}
+        {activeSection === "leetcode" && (
+          <WindowFrame title="LEETCODE // STATS_ANALYZER" onClose={handleClose} active>
+             <LeetCodeStats />
+          </WindowFrame>
+        )}
+      </AnimatePresence>
+
+      {/* --- NEW INTERACTIVE DOCK --- */}
+      <footer className="h-20 flex items-center justify-center px-6 relative z-[200]">
+        <div className="bg-zinc-900/80 backdrop-blur-3xl border border-white/10 px-4 py-2 rounded-2xl flex items-center gap-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <button onClick={() => handleClose()} className="p-3 hover:bg-white/5 rounded-xl transition-colors">
+            <Terminal size={20} className="text-green-500" />
+          </button>
+          
+          <div className="w-[1px] h-6 bg-white/10 mx-2" />
+
+          {apps.map((app) => (
+            <button
+              key={app.id}
+              onClick={() => handleOpen(app.id)}
+              className={`p-3 rounded-xl transition-all relative group ${
+                activeSection === app.id ? "bg-green-500/20 text-green-400" : "hover:bg-white/5 text-zinc-400"
+              }`}
+            >
+              <app.icon size={20} />
+              {activeSection === app.id && (
+                <motion.div 
+                  layoutId="dock-indicator"
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full shadow-[0_0_5px_#22c55e]"
+                />
+              )}
+              {/* Tooltip */}
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black border border-white/10 px-2 py-1 rounded text-[10px] uppercase font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                {app.label}
+              </span>
+            </button>
+          ))}
+
+          <div className="w-[1px] h-6 bg-white/10 mx-2" />
+          
+          <div className="px-3 flex flex-col items-end min-w-[80px]">
+             <span className="text-[9px] font-mono text-zinc-500 leading-none uppercase">Synced</span>
+             <span className="text-xs font-mono font-bold leading-none mt-1 tracking-tighter">{currentTime}</span>
+          </div>
+        </div>
+      </footer>
+
       <style>{`
-        canvas {
-            filter: blur(0.5px) contrast(1.1) brightness(1.1);
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(34, 197, 94, 0.5);
         }
       `}</style>
     </div>
   );
 };
 
-const BootSequence = ({ onComplete }) => {
-  const [lines, setLines] = useState([]);
-  const bootText = [
-    "INITIALIZING KERNEL...",
-    "LOADING MEMORY MODULES... OK",
-    "MOUNTING VIRTUAL FILE SYSTEM...",
-    "CHECKING GPU ACCELERATION... [ENABLED]",
-    "ESTABLISHING SECURE CONNECTION...",
-    "LOADING USER PROFILE: KANISHK_SONI",
-    "SYSTEM READY."
-  ];
-
-  useEffect(() => {
-    let delay = 0;
-    bootText.forEach((line) => {
-      delay += Math.random() * 500 + 200;
-      setTimeout(() => {
-        setLines((prev) => [...prev, line]);
-        const terminal = document.getElementById("boot-terminal");
-        if (terminal) terminal.scrollTop = terminal.scrollHeight;
-      }, delay);
-    });
-    setTimeout(onComplete, delay + 1000);
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-      transition={{ duration: 0.8 }}
-      className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center font-mono text-green-500 p-10"
-    >
-      <div id="boot-terminal" className="w-full max-w-2xl h-64 overflow-hidden flex flex-col justify-end border-l-2 border-green-500/30 pl-4">
-        {lines.map((line, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-sm md:text-base tracking-wider"
-          >
-            <span className="text-zinc-500">[{new Date().toLocaleTimeString()}]</span> {line}
-          </motion.div>
-        ))}
-        <motion.div 
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ repeat: Infinity, duration: 0.5 }}
-          className="w-3 h-5 bg-green-500 mt-1"
-        />
-      </div>
-      <div className="w-64 h-1 bg-zinc-900 mt-8 rounded overflow-hidden relative">
-        <motion.div 
-          className="absolute inset-y-0 left-0 bg-green-500 shadow-[0_0_10px_#22c55e]"
-          initial={{ width: "0%" }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 4, ease: "easeInOut" }}
-        />
-      </div>
-    </motion.div>
-  );
-};
-
-const WindowFrame = ({ title, children, onClose, constraintsRef }) => {
-  const [isMaximized, setIsMaximized] = useState(false);
-
-  const toggleMaximize = (e) => {
-    e.stopPropagation();
-    setIsMaximized(!isMaximized);
-  };
-
-  const handleMinimize = (e) => {
-    e.stopPropagation();
-    onClose(); // Acts as close/minimize to dock
-  };
-
-  return (
-    <motion.div
-      drag={!isMaximized} 
-      dragConstraints={constraintsRef}
-      dragMomentum={false}
-      dragElastic={0.1}
-      initial={{ scale: 0.8, opacity: 0, y: 50 }}
-      animate={{ 
-        scale: 1, 
-        opacity: 1, 
-        y: isMaximized ? 0 : 0,
-        x: isMaximized ? 0 : 0,
-        width: isMaximized ? "100%" : "clamp(350px, 85vw, 1100px)", 
-        height: isMaximized ? "100%" : "clamp(450px, 80vh, 800px)",
-        borderRadius: isMaximized ? "0px" : "12px",
-      }}
-      exit={{ scale: 0.8, opacity: 0, y: 50, transition: { duration: 0.2 } }}
-      className={`absolute z-50 flex flex-col bg-[#09090b]/90 backdrop-blur-xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden ring-1 ring-white/5 ${isMaximized ? "inset-0" : ""}`}
-    >
-      <div 
-        className="h-9 bg-gradient-to-r from-white/5 to-transparent border-b border-white/5 flex items-center justify-between px-3 select-none cursor-grab active:cursor-grabbing"
-        onDoubleClick={toggleMaximize}
-      >
-        <div className="flex gap-2 items-center group">
-          <div onClick={(e) => { e.stopPropagation(); onClose(); }} className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 cursor-pointer flex items-center justify-center text-[8px] font-bold text-transparent group-hover:text-black transition-all">×</div>
-          <div onClick={handleMinimize} className="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 cursor-pointer flex items-center justify-center text-[8px] font-bold text-transparent group-hover:text-black transition-all">-</div>
-          <div onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500/80 hover:bg-green-500 cursor-pointer flex items-center justify-center text-[6px] font-bold text-transparent group-hover:text-black transition-all">{isMaximized ? '↙' : '↗'}</div>
-        </div>
-        <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-[0.3em] flex items-center gap-2">
-             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></span>
-             {title}
-        </div>
-        <div className="w-10" />
-      </div>
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-black/40 relative">
-        {children}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_3px] z-50 opacity-20" />
-      </div>
-    </motion.div>
-  );
-};
-
-
-const DesktopIcon = ({ label, onClick, children, delay, constraintsRef }) => {
-  const grabSoundRef = useRef(new Audio(grabSoundUrl));
-  const dropSoundRef = useRef(new Audio(dropSoundUrl));
-
-  const playSound = (ref) => { try { ref.current.currentTime=0; ref.current.play(); } catch(e){} };
-
-  return (
-    <motion.div
-      drag
-      dragConstraints={constraintsRef}
-      dragMomentum={false}
-      onDragStart={() => playSound(grabSoundRef)}
-      onDragEnd={() => playSound(dropSoundRef)}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: delay * 0.2, duration: 0.5 }}
-      whileHover={{ scale: 1.05, zIndex: 20 }}
-      className="relative cursor-pointer group flex flex-col items-center gap-3 w-28 md:w-36"
-      onClick={onClick}
-    >
-      <div className="w-full aspect-square bg-zinc-900/30 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg group-hover:border-green-500/50 group-hover:bg-zinc-800/50 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all duration-300 relative">
-        {children}
-        <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </div>
-      <div className="px-3 py-1 bg-black/60 border border-white/5 rounded-full backdrop-blur-md">
-        <p className="text-[10px] md:text-xs font-mono text-zinc-300 uppercase tracking-wider group-hover:text-green-400 transition-colors">
-            {label}
-        </p>
-      </div>
-    </motion.div>
-  );
-};
-
-
-
-const Computerview = () => {
-  const constraintsRef = useRef(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [currentTime, setCurrentTime] = useState("");
-  const [countdown, setCountdown] = useState("");
-  const [booted, setBooted] = useState(false); 
-
-  const activeSection = searchParams.get("section");
-  const handleClose = () => setSearchParams({});
-  const handleOpen = (section) => setSearchParams({ section });
-
-  useEffect(() => {
-    const update = () => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString([], { hour12: false }));
-      setCountdown(Math.ceil((now - new Date("2023-08-27")) / (1000 * 60 * 60 * 24)));
-    };
-    update();
-    const i = setInterval(update, 1000);
-    return () => clearInterval(i);
-  }, []);
-
-  const skills = [ "Express.js", "React", "Next.js", "GSAP", "mySQL", "PostgreSQL", "Javascript", "Java", "C++", "DSA", "Python", "Tailwind", "TypeScript", "MongoDB" , "AWS" ,"FLASK" ,"KAFKA" ];
-
-  return (
-    <>
-      {/* --- BOOT SCREEN --- */}
-      <AnimatePresence>
-        {!booted && <BootSequence onComplete={() => setBooted(true)} />}
-      </AnimatePresence>
-
-      {/* --- MAIN OS INTERFACE --- */}
-      <div className="w-full h-screen bg-black relative overflow-hidden flex items-center justify-center text-white selection:bg-green-500/30">
-          
-          {/* 1. ANIMATED BACKGROUND */}
-          <BG />
-          <div className="absolute inset-0 bg-radial-gradient from-transparent to-black opacity-80 pointer-events-none" />
-
-          {/* 2. DESKTOP AREA */}
-          <motion.div ref={constraintsRef} className="w-[95vw] h-[85vh] relative z-10">
-              
-              {/* ICONS GRID */}
-              <div className="absolute inset-0 flex flex-wrap content-start gap-6 p-4 md:p-10 pointer-events-auto">
-                  
-                  {/* ABOUT */}
-                  <DesktopIcon label="Identity" delay={1} constraintsRef={constraintsRef} onClick={() => handleOpen("about")}>
-                      <PixelTransition 
-                          firstContent={<img src={mypic} className="w-full h-full object-cover opacity-90 grayscale group-hover:grayscale-0 transition-all" alt="Me"/>} 
-                          secondContent={<div className="font-black text-xl">ID CARD</div>} 
-                      />
-                  </DesktopIcon>
-
-                  {/* PROJECTS */}
-                  <DesktopIcon label="Projects" delay={2} constraintsRef={constraintsRef} onClick={() => handleOpen("projects")}>
-                       <video src={video} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" autoPlay muted loop />
-                       <div className="absolute inset-0 flex items-center justify-center font-['monument'] text-xl drop-shadow-lg">WORK</div>
-                  </DesktopIcon>
-
-                  {/* CLOCK */}
-                  <DesktopIcon label="System_Time" delay={3} constraintsRef={constraintsRef} onClick={() => handleOpen("clock")}>
-                       <div className="font-mono text-sm">{currentTime}</div>
-                  </DesktopIcon>
-
-                  {/* CONTACT */}
-                  <DesktopIcon label="Comms" delay={4} constraintsRef={constraintsRef} onClick={() => handleOpen("contact")}>
-                       <div className="text-3xl">✉️</div>
-                  </DesktopIcon>
-
-                  {/* LINKS */}
-                  <DesktopIcon label="Network" delay={5} constraintsRef={constraintsRef} onClick={() => handleOpen("links")}>
-                       <div className="text-3xl">🌐</div>
-                  </DesktopIcon>
-              </div>
-
-              {/* ACTIVE WINDOWS */}
-              <AnimatePresence>
-                  
-                  {/* --- ABOUT WINDOW --- */}
-                  {activeSection === "about" && (
-                      <WindowFrame title="USER_PROFILE // IDENTITY.SYS" onClose={handleClose} constraintsRef={constraintsRef}>
-                          <div className="w-full min-h-full flex flex-col items-center pt-8 pb-20 text-white">
-                              <div className="flex items-center gap-4 mb-6">
-                                  <h1 className="text-4xl md:text-6xl font-bold font-['Aquire']">KANISHK</h1>
-                                  <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b/512.gif" alt="👋" width="50" />
-                              </div>
-                              <div className="max-w-2xl text-center px-6 font-mono text-zinc-400 leading-relaxed mb-8 text-sm md:text-base">
-                                  <p>Full Stack Developer based in <span className="text-green-400">Jaipur</span>.</p>
-                                  <p>System Runtime: <span className="text-green-400">{countdown} days</span></p>
-                              </div>
-                              <div className="w-full h-[250px] mb-8 relative overflow-hidden border-y border-white/5 bg-black/40">
-                                  <Animation />
-                              </div>
-                              <div className="w-[90%] bg-[#0a0a0a] rounded-xl border border-white/10 p-6 relative overflow-hidden group">
-                                   <video muted autoPlay loop src={housewithfishvideo} className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity" />
-                                   <div className="relative z-10 flex flex-wrap justify-center gap-3">
-                                      {skills.map((s, i) => (
-                                          <span key={i} className="bg-black/60 border border-green-500/30 px-3 py-1 rounded text-xs font-mono text-green-400">{s}</span>
-                                      ))}
-                                   </div>
-                              </div>
-                          </div>
-                      </WindowFrame>
-                  )}
-
-                  {/* --- PROJECTS WINDOW --- */}
-                  {activeSection === "projects" && (
-                      <WindowFrame title="PROJECT_REPOSITORY // READ_ONLY" onClose={handleClose} constraintsRef={constraintsRef}>
-                          <Suspense fallback={<div className="p-10 text-center font-mono text-green-500 animate-pulse">LOADING DATA STREAMS...</div>}>
-                              <Projects />
-                          </Suspense>
-                      </WindowFrame>
-                  )}
-
-                  {/* --- CLOCK WINDOW --- */}
-                  {activeSection === "clock" && (
-                      <WindowFrame title="TEMPORAL_MONITOR" onClose={handleClose} constraintsRef={constraintsRef}>
-                           <div className="w-full h-full flex items-center justify-center">
-                              <Suspense fallback={<div>Loading...</div>}><Clock /></Suspense>
-                           </div>
-                      </WindowFrame>
-                  )}
-
-                  {/* --- CONTACT WINDOW --- */}
-                  {activeSection === "contact" && (
-                      <WindowFrame title="SECURE_UPLINK_V2" onClose={handleClose} constraintsRef={constraintsRef}>
-                           <div className="w-full h-full flex items-center justify-center">
-                              <Suspense fallback={<div>Loading...</div>}><Contact /></Suspense>
-                           </div>
-                      </WindowFrame>
-                  )}
-
-                  {/* --- LINKS WINDOW --- */}
-                  {activeSection === "links" && (
-                      <WindowFrame title="EXTERNAL_NETWORKS" onClose={handleClose} constraintsRef={constraintsRef}>
-                           <div className="w-full h-full flex flex-col items-center justify-center gap-6">
-                                {[{name : 'GITHUB',
-                                  link : "https://github.com/kanishk1122"
-                                }, {
-                                    name : 'LINKEDIN',
-                                    link : "https://www.linkedin.com/in/kanishk-21-soni/"
-                                }].map(link => (
-                                    <a key={link.name} target="_blank" rel="noopener noreferrer" href={link.link} className="text-2xl font-['monument'] text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 hover:to-green-400 transition-all">
-                                        {link.name}
-                                    </a>
-                                ))}
-                           </div>
-                      </WindowFrame>
-                  )}
-
-              </AnimatePresence>
-          </motion.div>
-
-          {/* 3. SYSTEM TRAY */}
-          <div className="absolute bottom-6 px-6 py-3 bg-zinc-900/80 backdrop-blur-2xl border border-white/10 rounded-full flex items-center gap-6 z-50 shadow-2xl">
-               <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
-                  <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">Online</span>
-               </div>
-               <div className="h-4 w-[1px] bg-white/10"></div>
-               <div className="text-xs font-mono text-zinc-400">{currentTime}</div>
-          </div>
-
-      </div>
-    </>
-  );
-};
-
-export default Computerview;
+export default App;

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Navbar from "./Navbar";
-import First3dmodel from "../3D-assets/First3dmodel";
 import Phoneview from "./Phoneview";
 import Computerview from "./Computerview";
 
@@ -29,15 +27,7 @@ const Home = () => {
     // 2. FIX: Use w-screen to ensure full width without accidental horizontal scroll
     <div className="w-screen h-fit bg-black text-white overflow-hidden cursor-none relative">
       
-      {/* Navbar Layer */}
-      <div className="absolute top-0 left-0 w-full z-50">
 
-        
-        {/* 3D Model Layer */}
-        <span className="w-fit max-sm:hidden fixed right-4 top-4 z-[9999]">
-          <First3dmodel />
-        </span>
-      </div>
 
       {/* Main Content Layer */}
       {/* 3. FIX: Removed mt-[10vh] and mb-10. The OS needs the full container. */}

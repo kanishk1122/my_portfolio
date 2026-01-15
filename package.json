@@ -32,6 +32,7 @@
     "react-router-dom": "^6.23.1",
     "react-routing": "^0.0.7",
     "react-text-transition": "^3.1.0",
+    "recharts": "^3.6.0",
     "sort-by": "^1.2.0",
     "three": "^0.165.0"
   },
